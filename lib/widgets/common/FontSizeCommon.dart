@@ -1,0 +1,20 @@
+import 'package:flutter/material.dart';
+
+const double FONT_SIZE_1 = 8;
+const double FONT_SIZE_2 = 10;
+const double FONT_SIZE_3 = 12;
+const double FONT_SIZE_4 = 14;
+const double FONT_SIZE_5 = 16;
+const double FONT_SIZE_6 = 18;
+const double FONT_SIZE_7 = 18;
+const double FONT_SIZE_8 = 20;
+const double FONT_SIZE_9 = 22;
+const double FONT_SIZE_10 = 24;
+const double FONT_SIZE_11 = 26;
+const double FONT_SIZE_12 = 28;
+const double FONT_SIZE_13 = 30;
+const double FONT_SIZE_14 = 32;
+const double FONT_SIZE_15 = 34;
+const double FONT_SIZE_16 = 36;
+const double FONT_SIZE_17 = 38;
+const double FONT_SIZE_18 = 40;
