@@ -15,3 +15,5 @@ const Color COLOR_D_LIGHT_2 = Color.fromARGB(255, 100, 100, 100);
 
 const Color COLOR_E_HEAVY = Color.fromRGBO(240, 240, 240, 1);
 const Color COLOR_E_LIGHT = Color.fromRGBO(224, 224, 224, 1);
+
+const Color COLOR_F_LOS = Color.fromARGB(255, 178, 178, 178);
