@@ -19,7 +19,8 @@ class ContentTextA extends StatelessWidget {
   final TextAlign textAlign;
 
   ContentTextA(this.text,
-      {super.key, this.margin = MAR_PAD_1,
+      {super.key,
+      this.margin = MAR_PAD_1,
       this.fontSize = FONT_SIZE_8,
       this.fontWeight = FONT_WEIGHT_3,
       this.letterSpacing = LETTER_SPACING_1,
@@ -34,6 +35,7 @@ class ContentTextA extends StatelessWidget {
       margin: EdgeInsets.all(margin),
       child: Text(
         text,
+        softWrap: true,
         style: TextStyle(
           fontFamily: fontFamily,
           fontSize: fontSize,

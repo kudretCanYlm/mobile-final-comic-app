@@ -34,6 +34,7 @@ class TitleTypeA extends StatelessWidget {
       margin: EdgeInsets.all(margin),
       child: Text(
         title,
+        softWrap: true,
         textAlign: textAlign,
         style: TextStyle(
           fontSize: fontSize,
