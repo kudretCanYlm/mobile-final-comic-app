@@ -27,8 +27,8 @@ class UserNormalCard extends StatelessWidget {
         children: [
           Container(
             margin: EdgeInsets.only(right: MAR_PAD_3),
-            width: 100,
-            height: 100,
+            width: 90,
+            height: 90,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(9999),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:comic_mobile_app/pages/ComicReview.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
@@ -13,7 +14,7 @@ class ContinueReadingCard extends StatelessWidget {
   final double imageSize;
 
   const ContinueReadingCard(this.comicContiune,
-      {super.key, this.imageSize = 90});
+      {super.key, this.imageSize = 70});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +60,7 @@ class ContinueReadingCard extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              print("will add navigation by id");
+              Navigator.of(context).push(_createRoute());
             },
             icon: Icon(Icons.play_arrow_sharp),
             iconSize: FONT_SIZE_16,
@@ -69,4 +70,21 @@ class ContinueReadingCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => ComicReview(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var tween = Tween(begin: begin, end: end);
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+  );
 }

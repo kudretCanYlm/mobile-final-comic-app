@@ -1,6 +1,7 @@
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
+import 'package:comic_mobile_app/widgets/common/FontWeightCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class IconButtonTypeB extends StatelessWidget {
   final Color backColor;
   final double padding;
   final double borderRadius;
+  final FontWeight fontWeight;
 
   const IconButtonTypeB(
     this.text,
@@ -27,6 +29,7 @@ class IconButtonTypeB extends StatelessWidget {
     this.backColor = COLOR_E_HEAVY_2,
     this.padding = MAR_PAD_2,
     this.borderRadius = BORDER_RADIUS_10,
+    this.fontWeight = FONT_WEIGHT_4,
     super.key,
   });
 
@@ -36,7 +39,14 @@ class IconButtonTypeB extends StatelessWidget {
       margin: EdgeInsets.all(margin),
       decoration: BoxDecoration(
           border: Border.all(width: 1, color: COLOR_E_HEAVY),
-          borderRadius: BorderRadius.circular(borderRadius)),
+          borderRadius: BorderRadius.circular(borderRadius),
+          boxShadow: [
+            BoxShadow(
+              color: COLOR_E_LIGHT,
+              blurRadius: 6,
+              offset: Offset(-4, 4),
+            )
+          ]),
       child: ElevatedButton(
         onPressed: () {
           callBack();
@@ -59,6 +69,7 @@ class IconButtonTypeB extends StatelessWidget {
                 style: TextStyle(
                   color: textColor,
                   fontSize: fontSize,
+                  fontWeight: fontWeight,
                 ),
               ),
             ],

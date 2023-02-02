@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:comic_mobile_app/models/Comic/ComicModels.dart';
+import 'package:comic_mobile_app/models/Comic/ComicCardModelA.dart';
+import 'package:comic_mobile_app/pages/ComicReview.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontWeightCommon.dart';
@@ -7,6 +8,7 @@ import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:comic_mobile_app/widgets/texts/content/ContentTextA.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ComicMiniCard extends StatelessWidget {
   final double marginHorizantal;
@@ -34,11 +36,24 @@ class ComicMiniCard extends StatelessWidget {
     return (Container(
       //decoration: BoxDecoration(border: Border.all()),
       child: GestureDetector(
-        onTap: () => callback(comic.ComicId),
+        onTap: () => {
+          Navigator.of(context).push(_createRoute()),
+        },
         child: Container(
           padding: EdgeInsets.all(MAR_PAD_1),
           width: cardwidth,
           height: cardHeight,
+          decoration: BoxDecoration(
+            color: COLOR_E_HEAVY_2,
+            borderRadius: BorderRadius.circular(BORDER_RADIUS_4),
+            boxShadow: [
+              BoxShadow(
+                color: COLOR_D_LIGHT_5,
+                blurRadius: 1,
+                offset: Offset(0, 0),
+              ),
+            ],
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -46,9 +61,9 @@ class ComicMiniCard extends StatelessWidget {
                 padding: EdgeInsets.all(MAR_PAD_1),
                 decoration: BoxDecoration(boxShadow: [
                   BoxShadow(
-                      color: COLOR_F_HEAVY,
-                      blurRadius: 30,
-                      offset: Offset(0, 0))
+                      color: COLOR_E_LIGHT,
+                      blurRadius: 15,
+                      offset: Offset(3, -3))
                 ]),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(imageBorderRadius),
@@ -58,6 +73,7 @@ class ComicMiniCard extends StatelessWidget {
                     height: imageHeight,
                     cacheHeight: imageHeight.toInt(),
                     width: double.infinity,
+                    gaplessPlayback: true,
                   ),
                 ),
               ),
@@ -71,6 +87,7 @@ class ComicMiniCard extends StatelessWidget {
                       comic.ComicName,
                       fontWeight: FONT_WEIGHT_4,
                       margin: MAR_PAD_0,
+                      color: COLOR_D_LIGHT_1,
                     ),
                     isWithDescr
                         ? ContentTextA(
@@ -91,5 +108,79 @@ class ComicMiniCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(
           vertical: marginVertical, horizontal: marginHorizantal),
     ));
+  }
+}
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => ComicReview(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var tween = Tween(begin: begin, end: end);
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+  );
+}
+
+class ComicMiniCardPlaceHolder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: Shimmer.fromColors(
+        baseColor: COLOR_D_LIGHT_6,
+        highlightColor: COLOR_E_HEAVY_2,
+        child: Container(
+          decoration: BoxDecoration(
+              border: Border.all(),
+              borderRadius: BorderRadius.circular(BORDER_RADIUS_3)),
+          height: 190,
+          width: 140,
+          padding: EdgeInsets.all(MAR_PAD_2),
+          margin: EdgeInsets.symmetric(horizontal: MAR_PAD_2),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: MAR_PAD_3),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: COLOR_D_LIGHT_6,
+                ),
+                height: 160,
+                width: double.infinity,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: MAR_PAD_1),
+                    height: 20,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: COLOR_D_LIGHT_6,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: MAR_PAD_1),
+                    height: 20,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: COLOR_D_LIGHT_6,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

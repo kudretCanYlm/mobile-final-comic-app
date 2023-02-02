@@ -18,6 +18,7 @@ class TextButtonTypeA extends StatelessWidget {
   final double size;
   final double paddingHorizantal;
   final double paddingVertical;
+  final double borderRadius;
 
   TextButtonTypeA(this.buttonText, this.callBack,
       {this.margin = MAR_PAD_0,
@@ -29,6 +30,7 @@ class TextButtonTypeA extends StatelessWidget {
       this.size = 0,
       this.paddingHorizantal = MAR_PAD_4,
       this.paddingVertical = MAR_PAD_3,
+      this.borderRadius = BORDER_RADIUS_3,
       super.key});
 
   @override
@@ -42,14 +44,18 @@ class TextButtonTypeA extends StatelessWidget {
             child: Text(
               buttonText,
               overflow: TextOverflow.clip,
-              style: TextStyle(fontSize: fontSize, fontFamily: fontfamily),
+              style: TextStyle(
+                fontSize: fontSize,
+                fontFamily: fontfamily,
+                color: textColor,
+              ),
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor: backgroundColor,
               padding: EdgeInsets.fromLTRB(paddingHorizantal, paddingVertical,
                   paddingHorizantal, paddingVertical),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(BORDER_RADIUS_3),
+                borderRadius: BorderRadius.circular(borderRadius),
               ),
             ),
           ),

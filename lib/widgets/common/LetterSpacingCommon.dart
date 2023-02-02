@@ -8,3 +8,6 @@ const double LETTER_SPACING_4 = 0.4;
 const double LETTER_SPACING_5 = 0.5;
 const double LETTER_SPACING_6 = 0.6;
 const double LETTER_SPACING_7 = 0.7;
+const double LETTER_SPACING_8 = 0.8;
+const double LETTER_SPACING_9 = 0.9;
+const double LETTER_SPACING_10 = 1.0;

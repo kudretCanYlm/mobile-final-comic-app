@@ -1,4 +1,5 @@
 import 'package:comic_mobile_app/models/Comic/ComicModels.dart';
+import 'package:comic_mobile_app/pages/ComicReview.dart';
 import 'package:comic_mobile_app/widgets/card/ContinueReadingCard.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
@@ -22,7 +23,7 @@ Future ContinueReadingModal(
       elevation: 5,
       builder: (BuildContext context) {
         return Container(
-          height: 220,
+          height: 190,
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
@@ -30,7 +31,7 @@ Future ContinueReadingModal(
                   fit: BoxFit.none,
                   scale: 2,
                   colorFilter:
-                      ColorFilter.mode(COLOR_B_LIGHT_2, BlendMode.colorBurn),
+                      ColorFilter.mode(COLOR_B_LIGHT_3, BlendMode.colorBurn),
                   opacity: 0.15)),
           child: Column(
             children: [
@@ -47,7 +48,7 @@ Future ContinueReadingModal(
                 child: Container(
                     padding: EdgeInsets.symmetric(
                       vertical: MAR_PAD_1,
-                      horizontal: MAR_PAD_4,
+                      horizontal: MAR_PAD_2,
                     ),
                     width: double.infinity,
                     height: double.infinity,
@@ -59,6 +60,7 @@ Future ContinueReadingModal(
                           "Continue Reading",
                           color: COLOR_E_HEAVY_2,
                           textAlign: TextAlign.left,
+                          fontSize: FONT_SIZE_9,
                         ),
                         ContinueReadingCard(comicContiune)
                       ],

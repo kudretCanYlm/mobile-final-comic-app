@@ -43,6 +43,7 @@ class TitleTypeA extends StatelessWidget {
           fontFamily: fontFamily,
           color: color,
           wordSpacing: wordSpacing,
+          decoration: TextDecoration.none,
         ),
       ),
     );

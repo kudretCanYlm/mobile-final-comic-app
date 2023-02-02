@@ -20,12 +20,12 @@ Future TopReadersModal(BuildContext context, List<UserModelA> userlist) {
       ),
       builder: (BuildContext context) {
         return Container(
-          height: 500,
+          height: 330,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [COLOR_B_LIGHT_3, COLOR_B_LIGHT],
+              colors: [COLOR_A_LIGHT_2, COLOR_A_LIGHT_3, COLOR_C_LIGHT_2],
             ),
           ),
           child: Column(
@@ -50,6 +50,7 @@ Future TopReadersModal(BuildContext context, List<UserModelA> userlist) {
                       "Top Readers",
                       textAlign: TextAlign.left,
                       color: COLOR_E_HEAVY_2,
+                      fontSize: FONT_SIZE_9,
                     ),
                   )),
               Expanded(
@@ -80,6 +81,7 @@ Future TopReadersModal(BuildContext context, List<UserModelA> userlist) {
                       "Top Comics",
                       textAlign: TextAlign.left,
                       color: COLOR_E_HEAVY_2,
+                      fontSize: FONT_SIZE_9,
                     ),
                   )),
               Expanded(

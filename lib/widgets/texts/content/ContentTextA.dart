@@ -34,11 +34,13 @@ class ContentTextA extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(margin),
       child: Text(
+        textAlign: textAlign,
         text,
         softWrap: true,
         style: TextStyle(
           fontFamily: fontFamily,
           fontSize: fontSize,
+          decoration: TextDecoration.none,
           letterSpacing: letterSpacing,
           wordSpacing: wordSpacing,
           fontWeight: fontWeight,

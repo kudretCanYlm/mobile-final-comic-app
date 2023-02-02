@@ -83,9 +83,14 @@ class _IconButtonTypeAState extends State<IconButtonTypeA> {
                 color: color,
                 size: widget.fontSize * 2,
               ),
-              Text(
-                widget.text,
-                style: TextStyle(color: color, fontSize: widget.fontSize),
+              Container(
+                width: 70,
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: MAR_PAD_1),
+                child: Text(
+                  widget.text,
+                  style: TextStyle(color: color, fontSize: widget.fontSize),
+                ),
               )
             ],
           ),

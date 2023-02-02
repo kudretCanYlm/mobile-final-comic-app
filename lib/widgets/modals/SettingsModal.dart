@@ -1,9 +1,15 @@
+import 'package:comic_mobile_app/pages/LoginPage.dart';
+import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Auth/AuthReducer.dart';
 import 'package:comic_mobile_app/widgets/buttons/TextButtonTypeB.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import '../../pages/MyComicsPage.dart';
 
 Future SettingsModal(BuildContext context) {
   return showModalBottomSheet<void>(
@@ -45,18 +51,63 @@ Future SettingsModal(BuildContext context) {
                       textAlign: TextAlign.left,
                     ),
                     TextButtonTypeB("Liked", () {}, fontSize: FONT_SIZE_9),
-                    TextButtonTypeB("Share my profile", () {},
-                        fontSize: FONT_SIZE_9),
+                    TextButtonTypeB("Details", () {
+                      Navigator.of(context).push(_createRoute());
+                    }, fontSize: FONT_SIZE_9),
                     TextButtonTypeB("QR Code", () {}, fontSize: FONT_SIZE_9),
                     TextButtonTypeB("Fovourites", () {}, fontSize: FONT_SIZE_9),
                     TextButtonTypeB("Archive", () {}, fontSize: FONT_SIZE_9),
-                    TextButtonTypeB("Log Out", () {}, fontSize: FONT_SIZE_9),
+                    TextButtonTypeB("Log Out", () {
+                      Navigator.pushAndRemoveUntil(
+                          context, _createRoute_2(), ModalRoute.withName('/'));
+                    }, fontSize: FONT_SIZE_9),
                   ],
                 ),
               ),
             )
           ],
         ),
+      );
+    },
+  );
+}
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => MyComicsPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var tween = Tween(begin: begin, end: end);
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+  );
+}
+
+Route _createRoute_2() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) =>
+        StoreBuilder<AppReducerState>(
+      builder: (BuildContext context, Store<AppReducerState> store) =>
+          LoginPage(store),
+      onInit: (store) => {
+        //store.dispatch();
+      },
+    ),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(1.0, 0.0);
+      var end = Offset.zero;
+      var tween = Tween(begin: begin, end: end);
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
       );
     },
   );

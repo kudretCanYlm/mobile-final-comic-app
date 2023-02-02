@@ -14,23 +14,35 @@ class InputTextBox extends StatelessWidget {
   final bool obscureText;
   final TextAlign textAlign;
   final void Function(String) textChange;
+  final Color borderColor;
+  final FontWeight fontweight;
+  final TextInputAction textInputAction;
+  final String? Function(String? value) validator;
+  final Function? onSubmit;
+  final bool isUnderLineBorder;
 
-  InputTextBox(
-    this.hintText,
-    this.textChange, {
-    this.margin = 15,
-    this.contentPadding = 5,
-    this.hintColor = COLOR_D_LIGHT_2,
-    this.fontSize = FONT_SIZE_8,
-    this.obscureText = false,
-    this.textAlign = TextAlign.left,
-    this.inputcolor = COLOR_D_HEAVY,
-  });
+  InputTextBox(this.hintText, this.textChange, this.validator,
+      {this.margin = 15,
+      this.contentPadding = 5,
+      this.hintColor = COLOR_D_LIGHT_2,
+      this.fontSize = FONT_SIZE_8,
+      this.obscureText = false,
+      this.textAlign = TextAlign.left,
+      this.inputcolor = COLOR_D_HEAVY,
+      this.borderColor = COLOR_E_HEAVY_2,
+      this.fontweight = FONT_WEIGHT_4,
+      this.textInputAction = TextInputAction.next,
+      this.onSubmit,
+      this.isUnderLineBorder = true});
 
   @override
   Widget build(Object context) {
     return Container(
-      child: TextField(
+      // ignore: sort_child_properties_last
+      child: TextFormField(
+        validator: validator,
+        textInputAction: textInputAction,
+        cursorColor: borderColor,
         onChanged: (text) {
           textChange(text);
         },
@@ -43,13 +55,27 @@ class InputTextBox extends StatelessWidget {
         obscureText: obscureText,
         textAlign: textAlign,
         decoration: InputDecoration(
-            border: UnderlineInputBorder(),
+            enabledBorder: isUnderLineBorder
+                ? UnderlineInputBorder(
+                    borderSide: BorderSide(color: borderColor),
+                  )
+                : OutlineInputBorder(
+                    borderSide: BorderSide(color: borderColor),
+                  ),
+            focusedBorder: isUnderLineBorder
+                ? UnderlineInputBorder(
+                    borderSide: BorderSide(color: borderColor),
+                  )
+                : OutlineInputBorder(
+                    borderSide: BorderSide(color: borderColor),
+                  ),
+            // border: UnderlineInputBorder(),
             focusColor: COLOR_B_HEAVY,
             fillColor: COLOR_B_HEAVY,
             hoverColor: COLOR_B_HEAVY,
             hintText: hintText,
             hintStyle: TextStyle(
-              fontWeight: FONT_WEIGHT_5,
+              fontWeight: fontweight,
               color: hintColor,
               fontSize: fontSize,
               letterSpacing: LETTER_SPACING_7,

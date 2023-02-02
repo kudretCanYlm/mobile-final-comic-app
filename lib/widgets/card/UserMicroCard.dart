@@ -17,8 +17,8 @@ class UserMicroCard extends StatelessWidget {
   const UserMicroCard(
     this.user, {
     super.key,
-    this.imageSize = 98,
-    this.marginRight = MAR_PAD_3,
+    this.imageSize = 74,
+    this.marginRight = MAR_PAD_1,
   });
 
   void toUserPage() {

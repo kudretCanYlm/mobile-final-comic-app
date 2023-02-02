@@ -18,3 +18,15 @@ const double FONT_SIZE_15 = 34;
 const double FONT_SIZE_16 = 36;
 const double FONT_SIZE_17 = 38;
 const double FONT_SIZE_18 = 40;
+
+const double FONT_SIZE_BIG_1 = 60;
+const double FONT_SIZE_BIG_2 = 70;
+const double FONT_SIZE_BIG_3 = 80;
+const double FONT_SIZE_BIG_4 = 90;
+const double FONT_SIZE_BIG_5 = 100;
+const double FONT_SIZE_BIG_6 = 110;
+const double FONT_SIZE_BIG_7 = 120;
+const double FONT_SIZE_BIG_8 = 130;
+const double FONT_SIZE_BIG_9 = 140;
+const double FONT_SIZE_BIG_10 = 150;
+const double FONT_SIZE_BIG_11 = 160;
