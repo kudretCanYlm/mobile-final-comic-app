@@ -60,9 +60,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       setState(() {
         bar_index = _tabController.index;
         if (bar_index == 1) {
-          animationController.forward();
+          animateColor();
         } else {
-          animationController.reverse();
+          animateColorReverse();
         }
       });
     });
@@ -73,66 +73,81 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     animationController.forward();
   }
 
+  void animateColorReverse() {
+    animationController.reverse();
+  }
+
+  void _moveToScreen2(BuildContext context) =>
+      Navigator.pushReplacementNamed(context, "screen2");
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.symmetric(horizontal: MAR_PAD_3),
-        clipBehavior: Clip.none,
-        height: 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(BORDER_RADIUS_3),
-        ),
-        child: TabBar(
-          controller: _tabController,
-          dragStartBehavior: DragStartBehavior.down,
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
-          indicatorColor: Colors.transparent,
-          unselectedLabelColor: COLOR_G_LIGHT,
-          labelColor: COLOR_G_HEAVY,
-          tabs: [
-            Tab(
-              icon: FaIcon(
-                FontAwesomeIcons.search,
-              ),
+    return WillPopScope(
+        child: Scaffold(
+          bottomNavigationBar: Container(
+            margin: EdgeInsets.symmetric(horizontal: MAR_PAD_3),
+            clipBehavior: Clip.none,
+            height: 50,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(BORDER_RADIUS_3),
             ),
-            Tab(
-              child: InkWell(
-                child: AnimatedBuilder(
-                    animation: colorAnimationBg,
-                    builder: (BuildContext _, Widget? __) {
-                      return Container(
-                          height: MediaQuery.of(context).size.height,
-                          padding: EdgeInsets.all(MAR_PAD_2),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(999),
-                            color: colorAnimationBg.value,
-                          ),
-                          child: AnimatedBuilder(
-                              animation: colorAnimationIcon,
-                              builder: (BuildContext _, Widget? __) {
-                                return FaIcon(
-                                  FontAwesomeIcons.home,
-                                  size: FONT_SIZE_10,
-                                  color: colorAnimationIcon.value,
-                                );
-                              }));
-                    }),
-              ),
+            child: TabBar(
+              controller: _tabController,
+              dragStartBehavior: DragStartBehavior.down,
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              indicatorColor: Colors.transparent,
+              unselectedLabelColor: COLOR_G_LIGHT,
+              labelColor: COLOR_G_HEAVY,
+              tabs: [
+                Tab(
+                  icon: FaIcon(
+                    FontAwesomeIcons.search,
+                  ),
+                ),
+                Tab(
+                  child: InkWell(
+                    child: AnimatedBuilder(
+                        animation: colorAnimationBg,
+                        builder: (BuildContext _, Widget? __) {
+                          return Container(
+                              height: MediaQuery.of(context).size.height,
+                              padding: EdgeInsets.all(MAR_PAD_2),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(999),
+                                color: colorAnimationBg.value,
+                              ),
+                              child: AnimatedBuilder(
+                                  animation: colorAnimationIcon,
+                                  builder: (BuildContext _, Widget? __) {
+                                    return FaIcon(
+                                      FontAwesomeIcons.home,
+                                      size: FONT_SIZE_10,
+                                      color: colorAnimationIcon.value,
+                                    );
+                                  }));
+                        }),
+                  ),
+                ),
+                Tab(
+                  icon: FaIcon(
+                    FontAwesome5.user,
+                  ),
+                )
+              ],
             ),
-            Tab(
-              icon: FaIcon(
-                FontAwesome5.user,
-              ),
-            )
-          ],
+          ),
+          body: TabBarView(controller: _tabController, children: [
+            SubSearchPage(),
+            SubMainPage(widget.store),
+            MyProfilePage()
+          ]),
         ),
-      ),
-      body: TabBarView(controller: _tabController, children: [
-        SubSearchPage(),
-        SubMainPage(widget.store),
-        MyProfilePage()
-      ]),
-    );
+        onWillPop: () async {
+          if (bar_index == 1) {
+            return true;
+          }
+          _tabController.index = 1;
+          return false;
+        });
   }
 }
