@@ -49,9 +49,7 @@ class LikedCard extends StatelessWidget {
             child: Image.memory(
               base64Decode(comicCardlikedModel.ImageBase64),
               height: imageSizeH,
-              cacheHeight: imageSizeH.toInt(),
               width: imageSizeW,
-              cacheWidth: imageSizeW.toInt(),
               fit: BoxFit.cover,
             ),
           ),

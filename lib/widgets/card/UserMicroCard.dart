@@ -42,9 +42,8 @@ class UserMicroCard extends StatelessWidget {
                   child: Image.memory(
                     base64Decode(user.Base64Image),
                     width: imageSize,
-                    cacheHeight: imageSize.toInt(),
-                    cacheWidth: imageSize.toInt(),
                     height: imageSize,
+                    fit: BoxFit.cover,
                   ),
                   borderRadius: BorderRadius.circular(imageSize),
                 ),

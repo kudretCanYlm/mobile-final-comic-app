@@ -31,9 +31,7 @@ class CharacterCard extends StatelessWidget {
             child: Image.memory(
               base64Decode(model.base64),
               height: height,
-              cacheHeight: height.toInt(),
               width: MediaQuery.of(context).size.width,
-              cacheWidth: MediaQuery.of(context).size.width.toInt(),
               fit: BoxFit.cover,
             ),
           ),

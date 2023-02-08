@@ -1,0 +1,1 @@
+enum SearchResultTypes { User, Comic }

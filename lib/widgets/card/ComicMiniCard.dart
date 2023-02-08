@@ -71,7 +71,6 @@ class ComicMiniCard extends StatelessWidget {
                     base64Decode(comic.ImageBase64),
                     fit: BoxFit.cover,
                     height: imageHeight,
-                    cacheHeight: imageHeight.toInt(),
                     width: double.infinity,
                     gaplessPlayback: true,
                   ),
