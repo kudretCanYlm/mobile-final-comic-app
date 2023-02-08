@@ -1,3 +1,4 @@
+import 'package:comic_mobile_app/Helper/string/NumberScaleExtension.dart';
 import 'package:comic_mobile_app/models/Comic/ComicModels.dart';
 import 'package:comic_mobile_app/models/Comic/ComicCardLikedModel.dart';
 import 'package:comic_mobile_app/models/Comic/ComicCardModelA.dart';
@@ -192,13 +193,9 @@ class _SubMainPageState extends State<SubMainPage>
         barColor = Color.fromRGBO(98, 0 + (height * scale).toInt(),
             238 - (height * scale).toInt(), 1);
 
-        fontSizeA = FONT_SIZE_6;
-        fontSizeB = FONT_SIZE_8;
-        iconFontSize = FONT_SIZE_13;
-      } else {
-        fontSizeA = FONT_SIZE_5;
-        fontSizeB = FONT_SIZE_4;
-        iconFontSize = FONT_SIZE_9;
+        fontSizeA = FONT_SIZE_6 - height.Scale(0, 30, 0, 2);
+        fontSizeB = FONT_SIZE_8 - height.Scale(0, 30, 0, 6);
+        iconFontSize = FONT_SIZE_13 - height.Scale(0, 30, 0, 8);
       }
     });
 
