@@ -71,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         toolbarHeight: 0,
         backgroundColor: COLOR_E_HEAVY_2,
+        elevation: 0,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
