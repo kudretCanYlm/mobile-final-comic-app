@@ -3,6 +3,7 @@ import 'package:comic_mobile_app/pages/MainPage/SubPage/SubSearchPage.dart';
 import 'package:comic_mobile_app/pages/MyProfilePage.dart';
 import 'package:comic_mobile_app/redux/actions/Comic/ComicAction.dart';
 import 'package:comic_mobile_app/redux/actions/Comic/LikedComicAction.dart';
+import 'package:comic_mobile_app/redux/actions/Page/MainPageIndexAction.dart';
 import 'package:comic_mobile_app/redux/actions/User/UserAction.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
@@ -54,11 +55,20 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     widget.store.dispatch(GetCurrentUserAction());
     widget.store.dispatch(GetComicList());
     widget.store.dispatch(GetLikedComicList());
+    widget.store.onChange.listen((event) {
+      if (event.mainPageIndexReducerState.index != bar_index) {
+        _tabController.index = event.mainPageIndexReducerState.index!;
+      }
+    });
 
-    _tabController = TabController(length: 3, vsync: this, initialIndex: 1);
+    _tabController = TabController(
+        length: 3,
+        vsync: this,
+        initialIndex: widget.store.state.mainPageIndexReducerState.index!);
     _tabController.addListener(() {
       setState(() {
         bar_index = _tabController.index;
+        widget.store.dispatch(SetIndex(_tabController.index));
         if (bar_index == 1) {
           animateColor();
         } else {
@@ -85,7 +95,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return WillPopScope(
         child: Scaffold(
           bottomNavigationBar: Container(
-            margin: EdgeInsets.symmetric(horizontal: MAR_PAD_3),
+            margin: const EdgeInsets.symmetric(horizontal: MAR_PAD_3),
             clipBehavior: Clip.none,
             height: 50,
             decoration: BoxDecoration(
@@ -99,7 +109,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               unselectedLabelColor: COLOR_G_LIGHT,
               labelColor: COLOR_G_HEAVY,
               tabs: [
-                Tab(
+                const Tab(
                   icon: FaIcon(
                     FontAwesomeIcons.search,
                   ),
@@ -111,7 +121,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                         builder: (BuildContext _, Widget? __) {
                           return Container(
                               height: MediaQuery.of(context).size.height,
-                              padding: EdgeInsets.all(MAR_PAD_2),
+                              padding: const EdgeInsets.all(MAR_PAD_2),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(999),
                                 color: colorAnimationBg.value,
@@ -128,7 +138,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                         }),
                   ),
                 ),
-                Tab(
+                const Tab(
                   icon: FaIcon(
                     FontAwesome5.user,
                   ),
@@ -137,13 +147,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ),
           ),
           body: TabBarView(controller: _tabController, children: [
-            SubSearchPage(),
+            SubSearchPage(widget.store),
             SubMainPage(widget.store),
             MyProfilePage()
           ]),
         ),
         onWillPop: () async {
-          if (bar_index == 1) {
+          if (_tabController.index == 1) {
             return true;
           }
           _tabController.index = 1;
