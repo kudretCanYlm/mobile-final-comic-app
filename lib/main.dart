@@ -13,14 +13,21 @@ import 'package:comic_mobile_app/pages/SignUpPage.dart';
 import 'package:comic_mobile_app/redux/Store.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import "package:firebase_core/firebase_core.dart";
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 Future<void> main() async {
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
+
   await Firebase.initializeApp();
   runApp(const MyApp());
   FlutterNativeSplash.remove();
@@ -36,6 +43,7 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
         store: createStore(),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blueGrey,
           ),
@@ -75,7 +83,14 @@ class MyApp extends StatelessWidget {
                     //store.dispatch();
                   },
                 ),
-            "/SearchPage": (context) => SubSearchPage(),
+            "/SearchPage": (context) => StoreBuilder<AppReducerState>(
+                  builder:
+                      (BuildContext context, Store<AppReducerState> store) =>
+                          SubSearchPage(store),
+                  onInit: (store) => {
+                    //store.dispatch();
+                  },
+                ),
             "/MyProfilePage": (context) => MyProfilePage(),
             "/MyComicsPage": (context) => MyComicsPage(),
             "/Review": (context) => ComicReview(),
