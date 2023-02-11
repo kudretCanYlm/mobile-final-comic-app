@@ -1,9 +1,6 @@
-import 'package:comic_mobile_app/pages/ForgotPassword.dart';
-import 'package:comic_mobile_app/pages/MainPage/MainPage.dart';
 import 'package:comic_mobile_app/pages/SignUpPage.dart';
 import 'package:comic_mobile_app/redux/actions/Auth/AuthAction.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
-import 'package:comic_mobile_app/redux/reducers/Auth/AuthReducer.dart';
 import 'package:comic_mobile_app/utils/validators/InputValidator.dart';
 import 'package:comic_mobile_app/widgets/buttons/IconButtonTypeB.dart';
 import 'package:comic_mobile_app/widgets/buttons/TextButtonTypeA.dart';
@@ -15,17 +12,9 @@ import 'package:comic_mobile_app/widgets/common/FontWeightCommon.dart';
 import 'package:comic_mobile_app/widgets/common/LetterSpacingCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:comic_mobile_app/widgets/inputs/textboxes/InputTextBox.dart';
-import 'package:comic_mobile_app/widgets/modals/NetworkErrorModal.dart';
-import 'package:comic_mobile_app/widgets/popUp/LoginPopUp.dart';
 import 'package:comic_mobile_app/widgets/texts/content/ContentTextA.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fluttericon/typicons_icons.dart';
-import 'package:fluttericon/fontelico_icons.dart';
-import 'package:fluttericon/linecons_icons.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:redux/redux.dart';
 
 class LoginPage extends StatefulWidget {
@@ -44,24 +33,6 @@ class _LoginPageState extends State<LoginPage> {
   String password = "";
 
   Future<void> login(BuildContext context) async {
-    //Registration
-    // try {
-    //   UserCredential userCredential = await FirebaseAuth.instance
-    //       .createUserWithEmailAndPassword(
-    //           email: "barry.allen@example.com",
-    //          password: "SuperSecretPassword!");
-    // } on FirebaseAuthException catch (e) {
-    //   if (e.code == 'weak-password') {
-    //     print('The password provided is too weak.');
-    //   } else if (e.code == 'email-already-in-use') {
-    //     print('The account already exists for that email.');
-    //   }
-    // } catch (e) {
-    //   print(e);
-    // }
-
-    //Sign-in
-
     widget.store.dispatch(loginAction(context, userName, password));
   }
 
@@ -139,7 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                                 () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => SignUpPage(),
+                                      builder: (context) =>
+                                          SignUpPage(widget.store),
                                       //settings: RouteSettings()
                                     ),
                                   );
@@ -195,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                 hintColor: COLOR_E_HEAVY_2,
                                 inputcolor: COLOR_E_HEAVY_2,
                                 fontSize: FONT_SIZE_6,
-                                margin: MAR_PAD_1,
+                                marginHorizontal: MAR_PAD_1,
                                 textInputAction: TextInputAction.next,
                               ),
                               Column(
@@ -207,11 +179,11 @@ class _LoginPageState extends State<LoginPage> {
                                     (string) {
                                       password = string;
                                     },
-                                    (value) => PasswordValitador(value),
+                                    (value) => PasswordValidador(value),
                                     hintColor: COLOR_E_HEAVY_2,
                                     inputcolor: COLOR_E_HEAVY_2,
                                     fontSize: FONT_SIZE_6,
-                                    margin: MAR_PAD_1,
+                                    marginHorizontal: MAR_PAD_1,
                                     obscureText: true,
                                     textInputAction: TextInputAction.go,
                                   ),
