@@ -1,6 +1,9 @@
+import 'package:comic_mobile_app/models/Comic/FavoriteModel.dart';
 import 'package:comic_mobile_app/pages/ForgotPassword.dart';
 import 'package:comic_mobile_app/pages/MainPage/MainPage.dart';
 import 'package:comic_mobile_app/pages/ProfileDetailsPage.dart';
+import 'package:comic_mobile_app/redux/actions/Comic/FavoriteAction.dart';
+import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
 import 'package:comic_mobile_app/widgets/buttons/IconButtonTypeA.dart';
 import 'package:comic_mobile_app/widgets/buttons/TextButtonTypeA.dart';
 import 'package:comic_mobile_app/widgets/buttons/TextButtonTypeb.dart';
@@ -13,8 +16,35 @@ import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:comic_mobile_app/widgets/texts/content/ContentTextA.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
 
-class LetUsKnow extends StatelessWidget {
+class LetUsKnow extends StatefulWidget {
+  final Store<AppReducerState> store;
+
+  LetUsKnow(this.store);
+
+  @override
+  State<StatefulWidget> createState() => _LetUsKnow();
+}
+
+List<FavoriteModel> favoriteList = [];
+bool? isLoading = true;
+
+class _LetUsKnow extends State<LetUsKnow> {
+  @override
+  void initState() {
+    widget.store.dispatch(GetFavoriteList());
+
+    widget.store.onChange.listen((event) {
+      setState(() {
+        if (event.favoritesReducerState.favorites != null) {
+          favoriteList = event.favoritesReducerState.favorites!;
+        }
+        isLoading = event.favoritesReducerState.isLoading;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +52,7 @@ class LetUsKnow extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 0,
         backgroundColor: COLOR_E_HEAVY_2,
+        elevation: 0,
       ),
       body: Container(
         padding: EdgeInsets.all(MAR_PAD_4),
@@ -67,40 +98,23 @@ class LetUsKnow extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.start,
-                        spacing: MAR_PAD_3, // gap between adjacent chips
-                        runSpacing: MAR_PAD_5, // gap between lines
-                        children: <Widget>[
-                          IconButtonTypeA(
-                            "Action",
-                            "45",
-                            Icons.attractions,
-                            (id) {},
-                            padding: MAR_PAD_4,
-                          ),
-                          IconButtonTypeA("Romance", "45",
-                              Icons.heart_broken_outlined, (id) {},
-                              padding: MAR_PAD_4),
-                          IconButtonTypeA(
-                              "Apple", "45", Icons.apple_sharp, (id) {},
-                              padding: MAR_PAD_4),
-                          IconButtonTypeA("Smile", "45",
-                              Icons.sentiment_satisfied_alt_outlined, (id) {},
-                              padding: MAR_PAD_4),
-                          IconButtonTypeA("Sports", "45",
-                              Icons.sports_martial_arts_rounded, (id) {},
-                              padding: MAR_PAD_4),
-                          IconButtonTypeA(
-                              "Anchor", "45", Icons.anchor_sharp, (id) {},
-                              padding: MAR_PAD_4),
-                          IconButtonTypeA(
-                              "Dark", "45", Icons.dark_mode_rounded, (id) {},
-                              padding: MAR_PAD_4),
-                          IconButtonTypeA(
-                              "Sunny", "45", Icons.wb_sunny_outlined, (id) {},
-                              padding: MAR_PAD_4),
-                        ],
-                      )
+                          alignment: WrapAlignment.start,
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          spacing: MAR_PAD_3, // gap between adjacent chips
+                          runSpacing: MAR_PAD_5, // gap between lines
+                          children: List.generate(
+                              isLoading == true ? 6 : favoriteList.length,
+                              (index) {
+                            return isLoading == true
+                                ? IconButtonTypeAPlaceHolder()
+                                : IconButtonTypeA(
+                                    favoriteList[index].Name,
+                                    favoriteList[index].Id,
+                                    favoriteList[index].Icon,
+                                    (id) {},
+                                    padding: MAR_PAD_4,
+                                  );
+                          }))
                     ],
                   ),
                 )
@@ -113,7 +127,7 @@ class LetUsKnow extends StatelessWidget {
                 TextButtonTypeA(
                   "Continue",
                   () {
-                    Navigator.of(context).push(_createRoute());
+                    Navigator.of(context).push(_createRoute(widget.store));
                   },
                   borderRadius: BORDER_RADIUS_11,
                   backgroundColor: COLOR_D_LIGHT_3,
@@ -135,10 +149,10 @@ class LetUsKnow extends StatelessWidget {
   }
 }
 
-Route _createRoute() {
+Route _createRoute(Store<AppReducerState> state) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) =>
-        ProfileDetailsPage(),
+        ProfileDetailsPage(state),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var begin = Offset(1.0, 0.0);
       var end = Offset.zero;
