@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:comic_mobile_app/models/Login/SignUpModel.dart';
 import 'package:comic_mobile_app/models/User/UserModels.dart';
 import 'package:comic_mobile_app/pages/MainPage/MainPage.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/Auth/AuthReducer.dart';
 import 'package:comic_mobile_app/widgets/modals/CircleLoadingModal.dart';
 import 'package:comic_mobile_app/widgets/modals/NetworkErrorModal.dart';
-import 'package:comic_mobile_app/widgets/popUp/LoginPopUp.dart';
+import 'package:comic_mobile_app/widgets/popUp/SignErrorPopUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -86,12 +87,13 @@ dynamic loginAction(BuildContext context, String username, String password) {
     } on FirebaseAuthException catch (e) {
       store.dispatch(IsLogining(false));
       store.dispatch(IsLoginingError(true));
-      Navigator.of(context).popUntil((route) => route.settings.name == '/');
 
       if (e.code == 'user-not-found') {
-        LoginPopUpWrongMail(context);
+        SignErrorPopUp(
+            context, 'Incorrect Entry', "No user found for that email.");
       } else if (e.code == 'wrong-password') {
-        LoginPopUpWrongPassword(context);
+        SignErrorPopUp(context, "Incorrect Entry",
+            "Wrong password provided for that user.");
       } else {
         NetworkErrorModal(context);
       }
