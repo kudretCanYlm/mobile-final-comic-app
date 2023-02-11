@@ -21,19 +21,54 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:fluttericon/fontelico_icons.dart';
 import 'package:fluttericon/linecons_icons.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:redux/redux.dart';
 
-class ProfileDetailsPage extends StatelessWidget {
+class ProfileDetailsPage extends StatefulWidget {
+  final Store<AppReducerState> store;
+
+  ProfileDetailsPage(this.store);
+
+  @override
+  State<StatefulWidget> createState() => _ProfileDetailsPage();
+}
+
+class _ProfileDetailsPage extends State<ProfileDetailsPage> {
+  final formKey = GlobalKey<FormState>();
+
+  bool allowNatifications = false;
+  bool agreeTerms = false;
+  bool sendEmail = false;
+  bool iscontinueButtonActive = false;
+  Color buttonBackgroundColor = COLOR_D_LIGHT_3;
+
+  void continueButtonControl() {
+    setState(() {
+      if (allowNatifications && agreeTerms && sendEmail) {
+        iscontinueButtonActive = true;
+        buttonBackgroundColor = COLOR_E_HEAVY;
+      } else {
+        iscontinueButtonActive = false;
+        buttonBackgroundColor = COLOR_D_LIGHT_3;
+      }
+    });
+  }
+
+  void readImage(String base64) {
+    print("uzunluk");
+    print(base64.length);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        toolbarHeight: 0,
-        backgroundColor: COLOR_E_HEAVY_2,
-      ),
       body: Container(
-        padding: EdgeInsets.all(MAR_PAD_4),
+        padding: EdgeInsets.only(
+            left: MAR_PAD_5,
+            right: MAR_PAD_5,
+            top: MediaQuery.of(context).viewPadding.top + MAR_PAD_1,
+            bottom: MAR_PAD_5),
         decoration: BoxDecoration(
           color: COLOR_E_HEAVY_2,
           image: DecorationImage(
@@ -53,78 +88,149 @@ class ProfileDetailsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
+                  margin: const EdgeInsets.only(
+                    bottom: MAR_PAD_4,
+                  ),
                   child: ImageUpload(
+                    readImage,
                     size: 110,
                     iconBackgroundColor: COLOR_D_LIGHT_4,
                   ),
-                  margin: EdgeInsets.only(
-                    bottom: MAR_PAD_4,
-                  ),
                 ),
-                Column(
-                  children: [
-                    InputTextBox(
-                      "Enter your name",
-                      (string) {
-                        print(string);
-                      },
-                      (value) {},
-                      hintColor: COLOR_E_HEAVY,
-                      inputcolor: COLOR_E_HEAVY,
-                      borderColor: COLOR_E_HEAVY,
-                      fontSize: FONT_SIZE_6,
-                      margin: MAR_PAD_2,
-                      obscureText: false,
-                      contentPadding: MAR_PAD_1,
-                    ),
-                    InputTextBox(
-                      "Enter your nickname",
-                      (string) {
-                        print(string);
-                      },
-                      (value) {},
-                      hintColor: COLOR_E_HEAVY,
-                      inputcolor: COLOR_E_HEAVY,
-                      borderColor: COLOR_E_HEAVY,
-                      fontSize: FONT_SIZE_6,
-                      margin: MAR_PAD_2,
-                      obscureText: false,
-                      contentPadding: MAR_PAD_1,
-                    ),
-                    InputTextBox(
-                      "Write your mail",
-                      (string) {
-                        print(string);
-                      },
-                      (value) {
-                        NotNullValidator(value, "Email");
-                      },
-                      hintColor: COLOR_E_HEAVY,
-                      inputcolor: COLOR_E_HEAVY,
-                      borderColor: COLOR_E_HEAVY,
-                      fontSize: FONT_SIZE_6,
-                      margin: MAR_PAD_2,
-                      obscureText: false,
-                      contentPadding: MAR_PAD_1,
-                    ),
-                    InputTextBox(
-                      "Write your phone",
-                      (string) {
-                        print(string);
-                      },
-                      (value) {
-                        NotNullValidator(value, "Password");
-                      },
-                      hintColor: COLOR_E_HEAVY,
-                      inputcolor: COLOR_E_HEAVY,
-                      borderColor: COLOR_E_HEAVY,
-                      fontSize: FONT_SIZE_6,
-                      margin: MAR_PAD_2,
-                      obscureText: false,
-                      contentPadding: MAR_PAD_1,
-                    ),
-                  ],
-                )
+                Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        InputTextBox(
+                          "Enter your name",
+                          (string) {
+                            print(string);
+                          },
+                          (value) => LengthValidator(value, 2, 50),
+                          hintColor: COLOR_E_HEAVY,
+                          inputcolor: COLOR_E_HEAVY,
+                          borderColor: COLOR_E_HEAVY,
+                          fontSize: FONT_SIZE_6,
+                          marginVertical: MAR_PAD_0,
+                          obscureText: false,
+                          contentPadding: MAR_PAD_1,
+                        ),
+                        InputTextBox(
+                          "Enter your nickname",
+                          (string) {
+                            print(string);
+                          },
+                          (value) => LengthValidator(value, 5, 50),
+                          hintColor: COLOR_E_HEAVY,
+                          inputcolor: COLOR_E_HEAVY,
+                          borderColor: COLOR_E_HEAVY,
+                          fontSize: FONT_SIZE_6,
+                          marginVertical: MAR_PAD_0,
+                          obscureText: false,
+                          contentPadding: MAR_PAD_1,
+                        ),
+                        InputTextBox(
+                          "Write your phone",
+                          (string) {
+                            print(string);
+                          },
+                          (value) => PhoneValidador(value),
+                          hintColor: COLOR_E_HEAVY,
+                          inputcolor: COLOR_E_HEAVY,
+                          borderColor: COLOR_E_HEAVY,
+                          fontSize: FONT_SIZE_6,
+                          marginVertical: MAR_PAD_0,
+                          obscureText: false,
+                          contentPadding: MAR_PAD_1,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: COLOR_D_HEAVY_V50,
+                              borderRadius: BorderRadius.circular(MAR_PAD_3)),
+                          padding: EdgeInsets.all(MAR_PAD_1),
+                          margin: EdgeInsets.only(top: MAR_PAD_4),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TitleTypeA(
+                                    "Allow Notifications",
+                                    color: COLOR_E_HEAVY_2,
+                                    fontWeight: FONT_WEIGHT_4,
+                                    fontSize: FONT_SIZE_6,
+                                  ),
+                                  Switch(
+                                    value: allowNatifications,
+                                    activeTrackColor: COLOR_F_HEAVY,
+                                    activeColor: COLOR_E_HEAVY_2,
+                                    inactiveThumbColor: COLOR_D_LIGHT_3,
+                                    inactiveTrackColor: COLOR_D_LIGHT_2,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        allowNatifications = value;
+                                      });
+                                      continueButtonControl();
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TitleTypeA(
+                                    "Agree Terms",
+                                    color: COLOR_E_HEAVY_2,
+                                    fontWeight: FONT_WEIGHT_4,
+                                    fontSize: FONT_SIZE_6,
+                                  ),
+                                  Switch(
+                                    value: agreeTerms,
+                                    activeTrackColor: COLOR_F_HEAVY,
+                                    activeColor: COLOR_E_HEAVY_2,
+                                    inactiveThumbColor: COLOR_D_LIGHT_3,
+                                    inactiveTrackColor: COLOR_D_LIGHT_2,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        agreeTerms = value;
+                                      });
+                                      continueButtonControl();
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TitleTypeA(
+                                    "Send Email",
+                                    color: COLOR_E_HEAVY_2,
+                                    fontWeight: FONT_WEIGHT_4,
+                                    fontSize: FONT_SIZE_6,
+                                  ),
+                                  Switch(
+                                    value: sendEmail,
+                                    activeTrackColor: COLOR_F_HEAVY,
+                                    activeColor: COLOR_E_HEAVY_2,
+                                    inactiveThumbColor: COLOR_D_LIGHT_3,
+                                    inactiveTrackColor: COLOR_D_LIGHT_2,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        sendEmail = value;
+                                      });
+                                      continueButtonControl();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ))
               ],
             ),
             Container(
@@ -132,10 +238,14 @@ class ProfileDetailsPage extends StatelessWidget {
               child: TextButtonTypeA(
                 "Continue",
                 () {
-                  Navigator.of(context).push(_createRoute());
+                  if (formKey.currentState!.validate() &&
+                      iscontinueButtonActive) {
+                    print("valid");
+                  }
+                  //Navigator.of(context).push(_createRoute());
                 },
                 borderRadius: BORDER_RADIUS_11,
-                backgroundColor: COLOR_E_LIGHT,
+                backgroundColor: buttonBackgroundColor,
                 textColor: COLOR_D_HEAVY,
               ),
             ),
