@@ -2,11 +2,13 @@ import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontWeightCommon.dart';
 import 'package:comic_mobile_app/widgets/common/LetterSpacingCommon.dart';
+import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:flutter/material.dart';
 
 class InputTextBox extends StatelessWidget {
   final String hintText;
-  final double margin;
+  final double marginHorizontal;
+  final double marginVertical;
   final double contentPadding;
   final Color hintColor;
   final Color inputcolor;
@@ -22,8 +24,9 @@ class InputTextBox extends StatelessWidget {
   final bool isUnderLineBorder;
 
   InputTextBox(this.hintText, this.textChange, this.validator,
-      {this.margin = 15,
-      this.contentPadding = 5,
+      {this.marginHorizontal = MAR_PAD_2,
+      this.marginVertical = MAR_PAD_3,
+      this.contentPadding = MAR_PAD_1,
       this.hintColor = COLOR_D_LIGHT_2,
       this.fontSize = FONT_SIZE_8,
       this.obscureText = false,
@@ -85,7 +88,8 @@ class InputTextBox extends StatelessWidget {
               right: contentPadding,
             )),
       ),
-      margin: EdgeInsets.all(margin),
+      margin: EdgeInsets.symmetric(
+          vertical: marginHorizontal, horizontal: marginVertical),
     );
   }
 }

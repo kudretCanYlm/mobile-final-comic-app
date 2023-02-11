@@ -1,9 +1,12 @@
+import 'dart:ui';
+
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shimmer/shimmer.dart';
 
 class IconButtonTypeA extends StatefulWidget {
   final double margin;
@@ -11,7 +14,7 @@ class IconButtonTypeA extends StatefulWidget {
   final void Function(String) callBack;
   final String text;
   final String id;
-  final IconData icon;
+  final int icon;
   final Color nonSelectBackColor;
   final Color selectedBackColor;
   final Color selectedColor;
@@ -79,12 +82,12 @@ class _IconButtonTypeAState extends State<IconButtonTypeA> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Icon(
-                widget.icon,
+                IconData(widget.icon, fontFamily: 'MaterialIcons'),
                 color: color,
                 size: widget.fontSize * 2,
               ),
               Container(
-                width: 70,
+                width: widget.size,
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: MAR_PAD_1),
                 child: Text(
@@ -106,5 +109,29 @@ class _IconButtonTypeAState extends State<IconButtonTypeA> {
         ),
       ),
     );
+  }
+}
+
+class IconButtonTypeAPlaceHolder extends StatelessWidget {
+  final double margin;
+  final double size;
+  IconButtonTypeAPlaceHolder({this.size = 100, this.margin = MAR_PAD_0});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        child: Shimmer.fromColors(
+      baseColor: COLOR_D_LIGHT_6,
+      highlightColor: COLOR_E_HEAVY,
+      child: Container(
+        margin: EdgeInsets.all(margin),
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+            color: COLOR_E_HEAVY,
+            border: Border.all(width: 1, color: COLOR_E_HEAVY),
+            borderRadius: BorderRadius.circular(BORDER_RADIUS_3)),
+      ),
+    ));
   }
 }
