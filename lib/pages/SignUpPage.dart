@@ -1,6 +1,8 @@
-import 'package:comic_mobile_app/pages/LetUsKnow.dart';
+import 'package:comic_mobile_app/models/Login/SignUpModel.dart';
+import 'package:comic_mobile_app/redux/actions/Auth/RegisterAction.dart';
+import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
+import 'package:comic_mobile_app/utils/validators/InputValidator.dart';
 import 'package:comic_mobile_app/widgets/buttons/IconButtonTypeB.dart';
-import 'package:comic_mobile_app/widgets/buttons/TextButtonTypeB.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
@@ -11,18 +13,32 @@ import 'package:comic_mobile_app/widgets/inputs/textboxes/InputTextBox.dart';
 import 'package:comic_mobile_app/widgets/texts/content/ContentTextA.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
 import 'package:flutter/material.dart';
-
+import 'package:redux/redux.dart';
 import '../widgets/buttons/TextButtonTypeA.dart';
-import 'ProfileDetailsPage.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
+  final Store<AppReducerState> store;
+  SignUpPage(this.store);
+
+  @override
+  State<StatefulWidget> createState() => _SignUpPage();
+}
+
+class _SignUpPage extends State<SignUpPage> {
+  final formKey = GlobalKey<FormState>();
+  SignUpModel signUpModel = SignUpModel("", "");
+
+  Future<void> login(BuildContext context) async {
+    widget.store.dispatch(RegisterAction(context, signUpModel));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         toolbarHeight: 0,
         backgroundColor: COLOR_E_HEAVY_2,
+        elevation: 0,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -104,44 +120,55 @@ class SignUpPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
+                          child: Form(
+                        key: formKey,
                         child: Column(
                           children: [
                             InputTextBox(
-                              "Login",
+                              "Email",
                               (string) {
-                                print(string);
+                                setState(() {
+                                  signUpModel.setEmail(string);
+                                });
                               },
-                              (value) {},
+                              (value) => EmailValitador(value),
                               hintColor: COLOR_E_HEAVY_2,
                               inputcolor: COLOR_E_HEAVY_2,
                               fontSize: FONT_SIZE_6,
-                              margin: MAR_PAD_1,
+                              marginHorizontal: MAR_PAD_1,
                             ),
                             InputTextBox("Password", (string) {
-                              print(string);
-                            }, (value) {},
+                              setState(() {
+                                signUpModel.setPassword(string);
+                              });
+                            }, (value) => PasswordValidador(value),
                                 hintColor: COLOR_E_HEAVY_2,
                                 inputcolor: COLOR_E_HEAVY_2,
                                 fontSize: FONT_SIZE_6,
-                                margin: MAR_PAD_1,
+                                marginHorizontal: MAR_PAD_1,
                                 obscureText: true),
-                            InputTextBox("Complete Password", (string) {
-                              print(string);
-                            }, (value) {},
+                            InputTextBox(
+                                "Complete Password",
+                                (string) {},
+                                (value) => PasswordValidadorDoubleCheck(
+                                    value, signUpModel.Password),
                                 hintColor: COLOR_E_HEAVY_2,
                                 inputcolor: COLOR_E_HEAVY_2,
                                 fontSize: FONT_SIZE_6,
-                                margin: MAR_PAD_1,
+                                marginHorizontal: MAR_PAD_1,
                                 obscureText: true),
                           ],
                         ),
-                      ),
+                      )),
                     ],
                   ),
                   TextButtonTypeA(
                     "Continue",
                     () {
-                      Navigator.of(context).push(_createRoute());
+                      // Validate returns true if the form is valid, or false otherwise.
+                      if (formKey.currentState!.validate()) {
+                        login(context);
+                      }
                     },
                     borderRadius: BORDER_RADIUS_11,
                     backgroundColor: COLOR_D_LIGHT_3,
@@ -154,21 +181,4 @@ class SignUpPage extends StatelessWidget {
       ),
     );
   }
-}
-
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => LetUsKnow(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1.0, 0.0);
-      var end = Offset.zero;
-      var tween = Tween(begin: begin, end: end);
-      var offsetAnimation = animation.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-  );
 }
