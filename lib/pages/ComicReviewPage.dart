@@ -102,8 +102,6 @@ class _ComicReviewPageState extends State<ComicReviewPage> {
       );
     } else {
       //start dowland data
-      var ksd = widget.store.state.comicDataReducerState;
-
       widget.store.dispatch(SetComicDownland(widget.comicId));
       setState(() {
         comicReviewPageStateModel.processDowlandingStart();
