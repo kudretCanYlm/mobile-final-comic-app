@@ -5,7 +5,7 @@ import 'package:comic_mobile_app/widgets/texts/content/ContentTextA.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
 import 'package:flutter/material.dart';
 import 'package:comic_mobile_app/models/Comic/ComicCardModelA.dart';
-import '../models/User/UserModels.dart';
+import '../models/User/UserModelB.dart';
 import '../widgets/card/ComicMiniCard.dart';
 import '../widgets/common/BorderRadiusCommon.dart';
 import '../widgets/common/ColorsCommon.dart';

@@ -1,27 +1,19 @@
-import 'package:comic_mobile_app/pages/ForgotPassword.dart';
+import 'package:comic_mobile_app/models/Login/ProfileDetailsModel.dart';
 import 'package:comic_mobile_app/pages/MainPage/MainPage.dart';
-import 'package:comic_mobile_app/pages/SignUpPage.dart';
+import 'package:comic_mobile_app/redux/actions/Auth/ProfileDetailsAction.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
 import 'package:comic_mobile_app/utils/validators/InputValidator.dart';
-import 'package:comic_mobile_app/widgets/buttons/IconButtonTypeB.dart';
 import 'package:comic_mobile_app/widgets/buttons/TextButtonTypeA.dart';
-import 'package:comic_mobile_app/widgets/buttons/TextButtonTypeB.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontWeightCommon.dart';
-import 'package:comic_mobile_app/widgets/common/LetterSpacingCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:comic_mobile_app/widgets/inputs/textboxes/InputTextBox.dart';
 import 'package:comic_mobile_app/widgets/inputs/upload/ImageUpload.dart';
-import 'package:comic_mobile_app/widgets/texts/content/ContentTextA.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fluttericon/typicons_icons.dart';
-import 'package:fluttericon/fontelico_icons.dart';
-import 'package:fluttericon/linecons_icons.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:redux/redux.dart';
 
 class ProfileDetailsPage extends StatefulWidget {
@@ -33,30 +25,63 @@ class ProfileDetailsPage extends StatefulWidget {
   State<StatefulWidget> createState() => _ProfileDetailsPage();
 }
 
-class _ProfileDetailsPage extends State<ProfileDetailsPage> {
+class _ProfileDetailsPage extends State<ProfileDetailsPage>
+    with TickerProviderStateMixin {
   final formKey = GlobalKey<FormState>();
 
   bool allowNatifications = false;
   bool agreeTerms = false;
   bool sendEmail = false;
   bool iscontinueButtonActive = false;
-  Color buttonBackgroundColor = COLOR_D_LIGHT_3;
+  Color buttonBackgroundColorA = COLOR_D_LIGHT_3;
+  Color buttonBackgroundColorB = COLOR_E_HEAVY_2;
+
+  late Animation<Color?> colorAnimationButtonBackgroundColor;
+  late AnimationController animationController;
+
+  var profileDetailsModel = ProfileDetailsModel("", "", "", "");
+
+  @override
+  void initState() {
+    profileDetailsModel.setImage("");
+
+    animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    // color tween
+    colorAnimationButtonBackgroundColor =
+        ColorTween(begin: buttonBackgroundColorA, end: buttonBackgroundColorB)
+            .animate(animationController);
+  }
 
   void continueButtonControl() {
     setState(() {
       if (allowNatifications && agreeTerms && sendEmail) {
+        animateColor();
         iscontinueButtonActive = true;
-        buttonBackgroundColor = COLOR_E_HEAVY;
+        buttonBackgroundColorA = COLOR_E_HEAVY;
       } else {
+        animateColorReverse();
         iscontinueButtonActive = false;
-        buttonBackgroundColor = COLOR_D_LIGHT_3;
+        buttonBackgroundColorA = COLOR_D_LIGHT_3;
       }
     });
   }
 
+  void animateColor() {
+    animationController.forward();
+  }
+
+  void animateColorReverse() {
+    animationController.reverse();
+  }
+
   void readImage(String base64) {
-    print("uzunluk");
-    print(base64.length);
+    setState(() {
+      profileDetailsModel.base64Image = base64;
+    });
   }
 
   @override
@@ -104,7 +129,9 @@ class _ProfileDetailsPage extends State<ProfileDetailsPage> {
                         InputTextBox(
                           "Enter your name",
                           (string) {
-                            print(string);
+                            setState(() {
+                              profileDetailsModel.RealName = string;
+                            });
                           },
                           (value) => LengthValidator(value, 2, 50),
                           hintColor: COLOR_E_HEAVY,
@@ -118,7 +145,9 @@ class _ProfileDetailsPage extends State<ProfileDetailsPage> {
                         InputTextBox(
                           "Enter your nickname",
                           (string) {
-                            print(string);
+                            setState(() {
+                              profileDetailsModel.NickName = string;
+                            });
                           },
                           (value) => LengthValidator(value, 5, 50),
                           hintColor: COLOR_E_HEAVY,
@@ -132,7 +161,9 @@ class _ProfileDetailsPage extends State<ProfileDetailsPage> {
                         InputTextBox(
                           "Write your phone",
                           (string) {
-                            print(string);
+                            setState(() {
+                              profileDetailsModel.Phone = string;
+                            });
                           },
                           (value) => PhoneValidador(value),
                           hintColor: COLOR_E_HEAVY,
@@ -233,49 +264,30 @@ class _ProfileDetailsPage extends State<ProfileDetailsPage> {
                     ))
               ],
             ),
-            Container(
-              height: 50,
-              child: TextButtonTypeA(
-                "Continue",
-                () {
-                  if (formKey.currentState!.validate() &&
-                      iscontinueButtonActive) {
-                    print("valid");
-                  }
-                  //Navigator.of(context).push(_createRoute());
-                },
-                borderRadius: BORDER_RADIUS_11,
-                backgroundColor: buttonBackgroundColor,
-                textColor: COLOR_D_HEAVY,
-              ),
-            ),
+            AnimatedBuilder(
+                animation: colorAnimationButtonBackgroundColor,
+                builder: (BuildContext _, Widget? __) {
+                  return Container(
+                    height: 50,
+                    child: TextButtonTypeA(
+                      "Continue",
+                      () {
+                        if (formKey.currentState!.validate() &&
+                            iscontinueButtonActive) {
+                          widget.store.dispatch(
+                              PostProfileDetails(context, profileDetailsModel));
+                        }
+                      },
+                      borderRadius: BORDER_RADIUS_11,
+                      backgroundColor:
+                          colorAnimationButtonBackgroundColor.value!,
+                      textColor: COLOR_D_HEAVY,
+                    ),
+                  );
+                }),
           ],
         ),
       ),
     );
   }
-}
-
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>
-        StoreBuilder<AppReducerState>(
-      builder: (BuildContext context, Store<AppReducerState> store) =>
-          MainPage(store),
-      onInit: (store) => {
-        //store.dispatch();
-      },
-    ),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1.0, 0.0);
-      var end = Offset.zero;
-      var tween = Tween(begin: begin, end: end);
-      var offsetAnimation = animation.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-  );
 }

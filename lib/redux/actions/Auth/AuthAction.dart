@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:comic_mobile_app/models/Login/SignUpModel.dart';
-import 'package:comic_mobile_app/models/User/UserModels.dart';
+import 'package:comic_mobile_app/models/User/UserModelB.dart';
+import 'package:comic_mobile_app/pages/LoginPage.dart';
 import 'package:comic_mobile_app/pages/MainPage/MainPage.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/Auth/AuthReducer.dart';
+import 'package:comic_mobile_app/routes/Route.dart';
 import 'package:comic_mobile_app/widgets/modals/CircleLoadingModal.dart';
 import 'package:comic_mobile_app/widgets/modals/NetworkErrorModal.dart';
 import 'package:comic_mobile_app/widgets/popUp/SignErrorPopUp.dart';
@@ -47,6 +49,12 @@ class LoginObject {
   LoginObject(this.userId, this.isLogin, this.type);
 }
 
+class LogOutObject {
+  AuthActions type;
+
+  LogOutObject(this.type);
+}
+
 //types functions
 //login
 IsLoginingObject IsLogining(bool isLogining) {
@@ -67,6 +75,11 @@ LoginObject Login(String? userId) {
   return obj;
 }
 
+LogOutObject LogOut() {
+  var obj = LogOutObject(AuthActions.LOGOUT);
+  return obj;
+}
+
 dynamic loginAction(BuildContext context, String username, String password) {
   return (Store<AppReducerState> store) async {
     CircleLoadingModal(context);
@@ -83,7 +96,7 @@ dynamic loginAction(BuildContext context, String username, String password) {
       store.dispatch(IsLogining(false));
 
       Navigator.of(context).popUntil((route) => route.settings.name == '/');
-      Navigator.of(context).push(_createRoute());
+      Navigator.of(context).push(mainPageRoute());
     } on FirebaseAuthException catch (e) {
       store.dispatch(IsLogining(false));
       store.dispatch(IsLoginingError(true));
@@ -101,61 +114,45 @@ dynamic loginAction(BuildContext context, String username, String password) {
   };
 }
 
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>
-        StoreBuilder<AppReducerState>(
-      builder: (BuildContext context, Store<AppReducerState> store) =>
-          MainPage(store),
-      onInit: (store) => {
-        //store.dispatch();
-      },
-    ),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1.0, 0.0);
-      var end = Offset.zero;
-      var tween = Tween(begin: begin, end: end);
-      var offsetAnimation = animation.drive(tween);
+dynamic LogOutAction(BuildContext context) {
+  return (Store<AppReducerState> store) {
+    store.dispatch(LogOut());
 
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-  );
+    Navigator.pushAndRemoveUntil(
+        context, loginPageRoute(), ModalRoute.withName('/'));
+  };
 }
 
+dynamic LoginWithNotRoute(
+    BuildContext context, String username, String password) {
+  return (Store<AppReducerState> store) async {
+    CircleLoadingModal(context);
+    store.dispatch(IsLogining(true));
 
-//source
-//https://github.com/pitriq/flutter_redux_boilerplate/blob/master/lib/actions/auth_actions.dart
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: username,
+        password: password,
+      );
 
-//Get a DatabaseReference
-//DatabaseReference ref = FirebaseDatabase.instance.ref();
+      store.dispatch(Login(userCredential.user?.uid));
+      store.dispatch(IsLogining(false));
 
-//Write data
-//Basic write operations
-//DatabaseReference ref = FirebaseDatabase.instance.ref("users/123");
+      Navigator.of(context).popUntil((route) => route.settings.name == '/');
+    } on FirebaseAuthException catch (e) {
+      store.dispatch(IsLogining(false));
+      store.dispatch(IsLoginingError(true));
 
-//await ref.set({
-//  "name": "John",
-//  "age": 18,
-//  "address": {
-//    "line1": "100 Mountain View"
-//  }
-//});
-
-//Read data
-//DatabaseReference starCountRef =
-//        FirebaseDatabase.instance.ref('posts/$postId/starCount');
-//starCountRef.onValue.listen((DatabaseEvent event) {
-//    final data = event.snapshot.value;
-//    updateStarCount(data);
-//});
-
-//final ref = FirebaseDatabase.instance.ref();
-//final snapshot = await ref.child('users/$userId').get();
-//if (snapshot.exists) {
-//    print(snapshot.value);
-//} else {
-//    print('No data available.');
-//}
+      if (e.code == 'user-not-found') {
+        SignErrorPopUp(
+            context, 'Incorrect Entry', "No user found for that email.");
+      } else if (e.code == 'wrong-password') {
+        SignErrorPopUp(context, "Incorrect Entry",
+            "Wrong password provided for that user.");
+      } else {
+        NetworkErrorModal(context);
+      }
+    }
+  };
+}

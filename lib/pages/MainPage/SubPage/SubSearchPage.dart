@@ -8,13 +8,10 @@ import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontFamilyCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
-import 'package:comic_mobile_app/widgets/inputs/textboxes/InputTextBox.dart';
 import 'package:comic_mobile_app/widgets/inputs/textboxes/NormalTextBox.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
-import 'package:comic_mobile_app/models/Search/common/SearchResultTypes.dart';
 
 class SubSearchPage extends StatefulWidget {
   final Store<AppReducerState> store;
@@ -38,15 +35,15 @@ class _SubSearchPageState extends State<SubSearchPage>
     widget.store.dispatch(InitSearch());
     widget.store.onChange.listen((event) {
       setState(() {
-        if (event.searchReducerState.searced == true) {
-          searchResultList = event.searchReducerState.searches!;
+        if (event.searchReducerState!.searced == true) {
+          searchResultList = event.searchReducerState!.searches!;
         } else {
           searchResultList = [];
         }
 
-        isSearching = event.searchReducerState.isSearcing;
-        notFound = event.searchReducerState.notfound;
-        isError = event.searchReducerState.isError;
+        isSearching = event.searchReducerState!.isSearcing;
+        notFound = event.searchReducerState!.notfound;
+        isError = event.searchReducerState!.isError;
         print(isSearching);
       });
     });

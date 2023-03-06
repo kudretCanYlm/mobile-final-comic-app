@@ -1,6 +1,13 @@
 //typs
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:comic_mobile_app/Helper/string/ImageHelper.dart';
 import 'package:comic_mobile_app/models/Login/ProfileDetailsModel.dart';
+import 'package:comic_mobile_app/pages/LetUsKnowPage.dart';
+import 'package:comic_mobile_app/redux/actions/Auth/AuthAction.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
+import 'package:comic_mobile_app/routes/Route.dart';
+import 'package:comic_mobile_app/widgets/modals/CircleLoadingModal.dart';
+import 'package:comic_mobile_app/widgets/popUp/SignErrorPopUp.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 
@@ -52,7 +59,32 @@ ProfileDetailsSendedObject ProfileDetailsSended(bool isSended) {
   return obj;
 }
 
-dynamic PushProfileDetails(
+dynamic PostProfileDetails(
     BuildContext context, ProfileDetailsModel profileDetailsModel) {
-  return (Store<AppReducerState> store) async {};
+  return (Store<AppReducerState> store) async {
+    CircleLoadingModal(context);
+    store.dispatch(ProfileDetailsSending(true));
+    CollectionReference users = FirebaseFirestore.instance.collection('user');
+
+    Future<void> addUser() {
+      // Call the user's CollectionReference to add a new user
+      return users.doc(store.state.registerReducerState!.userId).set({
+        'NickName': profileDetailsModel.NickName, // John Doe
+        'Phone': profileDetailsModel.Phone, // Stokes and Sons
+        'RealName': profileDetailsModel.RealName, // 42
+        'base64Image':
+            ResizeImageFromBase64(profileDetailsModel.base64Image, 700, 700)
+      }).then((value) {
+        store.dispatch(ProfileDetailsSended(true));
+        store.dispatch(Login(store.state.registerReducerState!.userId));
+        Navigator.of(context).popUntil((route) => route.settings.name == '/');
+        Navigator.of(context).push(letUsKnowPageRoute());
+      }).catchError((error) {
+        store.dispatch(ProfileDetailsSendingError(true));
+        SignErrorPopUp(context, 'Error', error.toString());
+      });
+    }
+
+    addUser();
+  };
 }

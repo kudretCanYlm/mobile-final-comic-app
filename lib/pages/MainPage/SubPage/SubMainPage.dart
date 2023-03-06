@@ -2,16 +2,19 @@ import 'package:comic_mobile_app/Helper/string/NumberScaleExtension.dart';
 import 'package:comic_mobile_app/models/Comic/ComicModels.dart';
 import 'package:comic_mobile_app/models/Comic/ComicCardLikedModel.dart';
 import 'package:comic_mobile_app/models/Comic/ComicCardModelA.dart';
-import 'package:comic_mobile_app/models/User/UserModels.dart';
-import 'package:comic_mobile_app/pages/ComicReview.dart';
+import 'package:comic_mobile_app/models/User/UserModelA.dart';
+import 'package:comic_mobile_app/models/User/UserModelB.dart';
+import 'package:comic_mobile_app/pages/ComicReviewPage.dart';
 import 'package:comic_mobile_app/pages/MyComicsPage.dart';
 import 'package:comic_mobile_app/pages/MyProfilePage.dart';
 import 'package:comic_mobile_app/pages/PdfReadPage.dart';
 import 'package:comic_mobile_app/pages/ProfileDetailsPage.dart';
 import 'package:comic_mobile_app/redux/actions/Comic/ComicAction.dart';
 import 'package:comic_mobile_app/redux/actions/Comic/LikedComicAction.dart';
+import 'package:comic_mobile_app/redux/actions/Page/MainPageIndexAction.dart';
 import 'package:comic_mobile_app/redux/actions/User/UserAction.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
+import 'package:comic_mobile_app/routes/Route.dart';
 import 'package:comic_mobile_app/widgets/buttons/IconButtonTypeB.dart';
 import 'package:comic_mobile_app/widgets/buttons/TextButtonTypeA.dart';
 import 'package:comic_mobile_app/widgets/card/ComicMiniCard.dart';
@@ -28,6 +31,7 @@ import 'package:comic_mobile_app/widgets/modals/ContinueReadingModal.dart';
 import 'package:comic_mobile_app/widgets/modals/TopReadersModal.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:redux/redux.dart';
@@ -111,63 +115,61 @@ class _SubMainPageState extends State<SubMainPage>
   void initState() {
     super.initState();
 
-    if (widget.store.state.userReducerState.user != null) {
-      userModelb = widget.store.state.userReducerState.user;
+    if (widget.store.state.userReducerState!.user != null) {
+      userModelb = widget.store.state.userReducerState!.user;
       isUserLoading = false;
     }
 
-    if (widget.store.state.comicsReducerState.comics != null) {
-      trendComicList = widget.store.state.comicsReducerState.comics!.toList();
+    if (widget.store.state.comicsReducerState!.comics != null) {
+      trendComicList = widget.store.state.comicsReducerState!.comics!.toList();
       isTrendComicsLoading = false;
     }
 
-    if (widget.store.state.likedComicsReducerState.comics != null) {
+    if (widget.store.state.likedComicsReducerState!.comics != null) {
       likedComicList =
-          widget.store.state.likedComicsReducerState.comics!.toList();
+          widget.store.state.likedComicsReducerState!.comics!.toList();
       islikedComicsLoading = false;
     }
 
     widget.store.onChange.listen((event) {
       setState(() {
         //user
-        if (event.userReducerState.isLoading != true) {
-          userModelb = event.userReducerState.user;
+        if (event.userReducerState!.isLoading != true) {
+          userModelb = event.userReducerState!.user;
           isUserLoading = false;
         }
-        if (event.userReducerState.isError == true) {
+        if (event.userReducerState!.isError == true) {
           userError = true;
         }
         //user
 
         //comic
-        if (event.comicsReducerState.isLoading != true &&
-            event.comicsReducerState.comics != null) {
+        if (event.comicsReducerState!.isLoading != true &&
+            event.comicsReducerState!.comics != null) {
           isTrendComicsLoading = false;
-          trendComicList = event.comicsReducerState.comics!.toList();
-        } else if (event.comicsReducerState.isError == true) {
+          trendComicList = event.comicsReducerState!.comics!.toList();
+        } else if (event.comicsReducerState!.isError == true) {
           trendComicsError = true;
         }
         //comic
 
         //liked comic
-        if (event.likedComicsReducerState.isLoading != true &&
-            event.likedComicsReducerState.comics != null) {
+        if (event.likedComicsReducerState!.isLoading != true &&
+            event.likedComicsReducerState!.comics != null) {
           islikedComicsLoading = false;
-          likedComicList = event.likedComicsReducerState.comics!.toList();
-        } else if (event.likedComicsReducerState.isError == true) {
+          likedComicList = event.likedComicsReducerState!.comics!.toList();
+        } else if (event.likedComicsReducerState!.isError == true) {
           likedComicsError = true;
         }
         //liked comic
       });
     });
 
-    // WidgetsBinding.instance
-    //     .addPostFrameCallback((_) => buildBottomModals(context));
     controller.addListener(onScroll);
   }
 
   void toProfilePage() {
-    Navigator.of(context).push(_createRoute());
+    Navigator.of(context).push(myProfilePageRoute());
   }
 
   //scroll animation
@@ -238,6 +240,7 @@ class _SubMainPageState extends State<SubMainPage>
             flexibleSpace: Stack(
               children: <Widget>[
                 Container(
+                  height: double.infinity,
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(
                     bottom: MAR_PAD_2,
@@ -288,7 +291,9 @@ class _SubMainPageState extends State<SubMainPage>
                   child: Column(
                     children: [
                       IconButtonTypeB("Search Comic", () {
-                        Navigator.of(context).pushNamed("/SearchPage");
+                        setState(() {
+                          widget.store.dispatch(SetIndex(0));
+                        });
                       }, Icons.search),
                       Container(
                         margin: EdgeInsets.only(
@@ -420,23 +425,6 @@ class _SubMainPageState extends State<SubMainPage>
           )
         ],
       ),
-    );
-  }
-
-  Route _createRoute() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => MyProfilePage(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        var begin = Offset(1.0, 0.0);
-        var end = Offset.zero;
-        var tween = Tween(begin: begin, end: end);
-        var offsetAnimation = animation.drive(tween);
-
-        return SlideTransition(
-          position: offsetAnimation,
-          child: child,
-        );
-      },
     );
   }
 

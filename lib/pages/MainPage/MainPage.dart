@@ -52,19 +52,19 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         .animate(animationController);
 
     animationController.forward();
-    widget.store.dispatch(GetCurrentUserAction());
+    widget.store.dispatch(GetCurrentUserAction(context));
     widget.store.dispatch(GetComicList());
     widget.store.dispatch(GetLikedComicList());
     widget.store.onChange.listen((event) {
-      if (event.mainPageIndexReducerState.index != bar_index) {
-        _tabController.index = event.mainPageIndexReducerState.index!;
+      if (event.mainPageIndexReducerState!.index != bar_index) {
+        _tabController.index = event.mainPageIndexReducerState!.index!;
       }
     });
 
     _tabController = TabController(
         length: 3,
         vsync: this,
-        initialIndex: widget.store.state.mainPageIndexReducerState.index!);
+        initialIndex: widget.store.state.mainPageIndexReducerState!.index!);
     _tabController.addListener(() {
       setState(() {
         bar_index = _tabController.index;
@@ -149,7 +149,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           body: TabBarView(controller: _tabController, children: [
             SubSearchPage(widget.store),
             SubMainPage(widget.store),
-            MyProfilePage()
+            //change and add new page
+            MyProfilePage(widget.store)
           ]),
         ),
         onWillPop: () async {

@@ -1,7 +1,9 @@
 import 'package:comic_mobile_app/models/Login/SignUpModel.dart';
-import 'package:comic_mobile_app/pages/LetUsKnow.dart';
+import 'package:comic_mobile_app/pages/LetUsKnowPage.dart';
 import 'package:comic_mobile_app/pages/ProfileDetailsPage.dart';
+import 'package:comic_mobile_app/redux/actions/Auth/AuthAction.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
+import 'package:comic_mobile_app/routes/Route.dart';
 import 'package:comic_mobile_app/widgets/modals/CircleLoadingModal.dart';
 import 'package:comic_mobile_app/widgets/modals/NetworkErrorModal.dart';
 import 'package:comic_mobile_app/widgets/popUp/SignErrorPopUp.dart';
@@ -71,9 +73,11 @@ dynamic RegisterAction(BuildContext context, SignUpModel signUpModel) {
               email: signUpModel.Email, password: signUpModel.Password);
 
       store.dispatch(Register(userCredential.user?.uid));
+      store.dispatch(
+          LoginWithNotRoute(context, signUpModel.Email, signUpModel.Password));
 
       Navigator.of(context).popUntil((route) => route.settings.name == '/');
-      Navigator.of(context).push(_letUsKnowRoute(store));
+      Navigator.of(context).push(profileDetailsPageRoute());
     } on FirebaseAuthException catch (e) {
       store.dispatch(IsRegisteringError(true));
 
@@ -88,22 +92,4 @@ dynamic RegisterAction(BuildContext context, SignUpModel signUpModel) {
       NetworkErrorModal(context);
     }
   };
-}
-
-Route _letUsKnowRoute(Store<AppReducerState> store) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) =>
-        ProfileDetailsPage(store),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1.0, 0.0);
-      var end = Offset.zero;
-      var tween = Tween(begin: begin, end: end);
-      var offsetAnimation = animation.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-  );
 }
