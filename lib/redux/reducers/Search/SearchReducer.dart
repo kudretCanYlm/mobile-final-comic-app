@@ -1,22 +1,5 @@
-import 'package:comic_mobile_app/models/Search/SearchResultModel.dart';
 import 'package:comic_mobile_app/redux/actions/Search/SearchAction.dart';
-import 'package:flutter/cupertino.dart';
-
-@immutable
-class SearchReducerState {
-  final bool? isSearcing;
-  final bool? searced;
-  final bool? isError;
-  final bool? notfound;
-  final List<SearchResultModel>? searches;
-
-  SearchReducerState(
-      {this.isSearcing,
-      this.searced,
-      this.isError,
-      this.notfound,
-      this.searches});
-}
+import 'package:comic_mobile_app/redux/reducers/Search/State/SearchReducerState.dart';
 
 SearchReducerState SearchReducer(
     SearchReducerState previousState, dynamic action) {
@@ -31,7 +14,7 @@ SearchReducerState SearchReducer(
       );
     case SearchActions.SEARCH_ERROR:
       return SearchReducerState(
-        isError: action.isError,
+        isError: action.isSendError,
         isSearcing: false,
         searced: false,
         notfound: false,

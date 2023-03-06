@@ -1,15 +1,5 @@
-import 'package:comic_mobile_app/models/Comic/ComicCardModelA.dart';
 import 'package:comic_mobile_app/redux/actions/Comic/ComicAction.dart';
-import 'package:flutter/cupertino.dart';
-
-@immutable
-class ComicsReducerState {
-  final bool? isLoading;
-  final bool? isError;
-  final List<ComicCardModelA>? comics;
-
-  ComicsReducerState({this.isLoading, this.isError, this.comics});
-}
+import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicsReducerState.dart';
 
 ComicsReducerState ComicsReducer(
     ComicsReducerState previousState, dynamic action) {

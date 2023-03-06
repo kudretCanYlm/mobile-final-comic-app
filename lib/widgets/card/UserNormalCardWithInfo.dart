@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:comic_mobile_app/models/User/UserModels.dart';
+import 'package:comic_mobile_app/models/User/UserModelB.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontWeightCommon.dart';
@@ -43,16 +43,18 @@ class UserNormalCardWithInfo extends StatelessWidget {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                ClipRRect(
+                Expanded(
+                    child: ClipRRect(
                   borderRadius: BorderRadius.circular(9999),
                   child: Image.memory(
                     base64Decode(user!.Base64Image),
                     fit: BoxFit.cover,
-                    //width: double.infinity,
-                    height: imageSize,
+                    //width: imageSize,
+                    //height: imageSize,
+                    //width: imageSize / 9,
                     gaplessPlayback: true,
                   ),
-                ),
+                )),
                 Positioned(
                   top: -15,
                   right: -15,

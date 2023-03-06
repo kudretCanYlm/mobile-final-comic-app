@@ -1,15 +1,5 @@
-import 'package:comic_mobile_app/models/Comic/ComicCardLikedModel.dart';
 import 'package:comic_mobile_app/redux/actions/Comic/LikedComicAction.dart';
-import 'package:flutter/cupertino.dart';
-
-@immutable
-class LikedComicsReducerState {
-  final bool? isLoading;
-  final bool? isError;
-  final List<ComicCardLikedModel>? comics;
-
-  LikedComicsReducerState({this.isLoading, this.isError, this.comics});
-}
+import 'package:comic_mobile_app/redux/reducers/Comic/State/LikedComicsReducerState.dart';
 
 LikedComicsReducerState LikedComicsReducer(
     LikedComicsReducerState previousState, dynamic action) {
@@ -19,7 +9,7 @@ LikedComicsReducerState LikedComicsReducer(
           isLoading: action.isLoading, isError: false, comics: null);
     case LikedComicActions.LIKED_COMIC_ERROR:
       return LikedComicsReducerState(
-          isLoading: false, isError: action.isError, comics: null);
+          isLoading: false, isError: action.isSendError, comics: null);
     case LikedComicActions.LIKED_COMIC_LOADED:
       return LikedComicsReducerState(
           isLoading: false, isError: false, comics: action.comics);

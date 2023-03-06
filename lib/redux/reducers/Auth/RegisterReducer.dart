@@ -1,16 +1,5 @@
 import 'package:comic_mobile_app/redux/actions/Auth/RegisterAction.dart';
-import 'package:flutter/cupertino.dart';
-
-@immutable
-class RegisterReducerState {
-  final bool? isRegistering;
-  final bool? isError;
-  final String? userId;
-  final bool? isRegister;
-
-  RegisterReducerState(
-      {this.isRegistering, this.isError, this.userId, this.isRegister});
-}
+import 'package:comic_mobile_app/redux/reducers/Auth/State/RegisterReducerState.dart';
 
 RegisterReducerState RegisterReducer(
     RegisterReducerState previousState, dynamic action) {

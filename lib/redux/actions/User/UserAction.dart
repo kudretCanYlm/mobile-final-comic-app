@@ -1,9 +1,13 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:comic_mobile_app/models/User/UserModels.dart';
+import 'package:comic_mobile_app/models/User/UserModelB.dart';
+import 'package:comic_mobile_app/pages/ProfileDetailsPage.dart';
+import 'package:comic_mobile_app/redux/actions/Auth/RegisterAction.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
+import 'package:comic_mobile_app/routes/Route.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 
 enum UserActions {
@@ -53,7 +57,7 @@ UserLoadedObject UserLoaded(UserModelB user) {
 }
 
 //actions
-dynamic GetCurrentUserAction() {
+dynamic GetCurrentUserAction(BuildContext context) {
   return (Store<AppReducerState> store) async {
     store.dispatch(IsUserLoading(true));
 
@@ -61,7 +65,7 @@ dynamic GetCurrentUserAction() {
     try {
       var user = await FirebaseFirestore.instance
           .collection("user")
-          .doc(store.state.authReducerState.userId)
+          .doc(store.state.authReducerState!.userId)
           .get();
 
       if (user.exists) {
@@ -73,7 +77,8 @@ dynamic GetCurrentUserAction() {
 
         store.dispatch(UserLoaded(model));
       } else {
-        store.dispatch(UserLoadingError(true));
+        store.dispatch(Register(store.state.authReducerState!.userId));
+        Navigator.of(context).push(profileDetailsPageRoute());
       }
     } on FirebaseException catch (e) {
       store.dispatch(UserLoadingError(true));

@@ -1,9 +1,5 @@
 import 'package:comic_mobile_app/redux/actions/Page/MainPageIndexAction.dart';
-
-class MainPageIndexReducerState {
-  final int? index;
-  MainPageIndexReducerState({this.index});
-}
+import 'package:comic_mobile_app/redux/reducers/Page/State/MainPageIndexReducerState.dart';
 
 MainPageIndexReducerState MainPageIndexReducer(
     MainPageIndexReducerState previousState, dynamic action) {

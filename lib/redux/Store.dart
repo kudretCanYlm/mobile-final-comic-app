@@ -1,31 +1,54 @@
 import 'package:comic_mobile_app/redux/middleware/Middleware.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
-import 'package:comic_mobile_app/redux/reducers/Auth/AuthReducer.dart';
-import 'package:comic_mobile_app/redux/reducers/Auth/RegisterReducer.dart';
-import 'package:comic_mobile_app/redux/reducers/Comic/ComicsReducer.dart';
-import 'package:comic_mobile_app/redux/reducers/Comic/FavoritesReducer.dart';
-import 'package:comic_mobile_app/redux/reducers/Comic/LikedComicsReducer.dart';
-import 'package:comic_mobile_app/redux/reducers/Page/MainPageIndexReducer.dart';
-import 'package:comic_mobile_app/redux/reducers/Search/SearchReducer.dart';
-import 'package:comic_mobile_app/redux/reducers/User/UserReducer.dart';
+import 'package:comic_mobile_app/redux/reducers/Auth/State/AuthReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Auth/State/ProfileDetailsReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Auth/State/RegisterReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicCharacterReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicDataReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicReviewReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicStatisticsReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicsReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/FavoritesReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/LikedComicsReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Page/State/MainPageIndexReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Search/State/SearchReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/User/State/UserReducerState.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux_logging/redux_logging.dart';
 
-Store<AppReducerState> createStore() {
+Future<Store<AppReducerState>> createStore() async {
+  AppReducerState? initialState;
+  try {
+    initialState = await persistor.load();
+  } catch (e) {
+    initialState = null;
+  }
+
   // ignore: unnecessary_new
   Store<AppReducerState> store = new Store(
     AppReducer,
     initialState: AppReducerState(
-        AuthReducerState(true, false, "", false),
-        RegisterReducerState(),
-        UserReducerState(),
-        ComicsReducerState(),
-        LikedComicsReducerState(),
-        FavoritesReducerState(),
-        MainPageIndexReducerState(index: 1),
-        SearchReducerState()),
-    middleware: createMiddleware(),
+        authReducerState: initialState?.authReducerState ?? AuthReducerState(),
+        profileDetailsReducerState: ProfileDetailsReducerState(),
+        registerReducerState: RegisterReducerState(),
+        userReducerState: UserReducerState(),
+        comicCharacterReducerState: ComicCharacterReducerState(),
+        comicDataReducerState:
+            initialState?.comicDataReducerState ?? ComicDataReducerState([]),
+        comicReviewReducerState: ComicReviewReducerState(),
+        comicStatisticsReducerState: ComicStatisticsReducerState(),
+        comicsReducerState: ComicsReducerState(),
+        likedComicsReducerState: LikedComicsReducerState(),
+        favoritesReducerState: FavoritesReducerState(),
+        mainPageIndexReducerState: MainPageIndexReducerState(index: 1),
+        searchReducerState: SearchReducerState()),
+    middleware: [
+      thunkMiddleware,
+      persistor.createMiddleware(),
+      new LoggingMiddleware.printer(),
+    ],
   );
-  //persistor.start(store);
 
   return store;
 }

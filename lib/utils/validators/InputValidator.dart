@@ -60,7 +60,7 @@ String? PhoneValidador(String? value) {
   RegExp regExp = new RegExp(pattern);
   if (value!.isEmpty) {
     return 'Please enter mobile number';
-  } else if (!regExp.hasMatch(value!)) {
+  } else if (!regExp.hasMatch(value)) {
     return 'Please enter valid mobile number';
   }
   return null;

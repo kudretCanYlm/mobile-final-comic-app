@@ -1,14 +1,18 @@
 import 'dart:convert';
 import 'package:comic_mobile_app/models/Search/SearchResultModel.dart';
 import 'package:comic_mobile_app/models/Search/common/SearchResultTypes.dart';
-import 'package:comic_mobile_app/pages/ComicReview.dart';
+import 'package:comic_mobile_app/pages/ComicReviewPage.dart';
+import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
+import 'package:comic_mobile_app/routes/Route.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:redux/redux.dart';
 
 class SearchResultCard extends StatelessWidget {
   final double cardWidth;
@@ -35,7 +39,7 @@ class SearchResultCard extends StatelessWidget {
               //Navigator.of(context).push(route)
               break;
             case SearchResultTypes.Comic:
-              Navigator.of(context).push(_toComicRoute());
+              Navigator.of(context).push(comicReviewPageRoute());
               break;
           }
         },
@@ -84,23 +88,6 @@ class SearchResultCard extends StatelessWidget {
       ),
     );
   }
-}
-
-Route _toComicRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => ComicReview(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1.0, 0.0);
-      var end = Offset.zero;
-      var tween = Tween(begin: begin, end: end);
-      var offsetAnimation = animation.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-  );
 }
 
 class SearchResultCardPlaceHolder extends StatelessWidget {

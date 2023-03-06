@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'package:comic_mobile_app/pages/ComicReview.dart';
+import 'package:comic_mobile_app/pages/ComicReviewPage.dart';
+import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
+import 'package:comic_mobile_app/routes/Route.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
@@ -7,7 +9,9 @@ import 'package:comic_mobile_app/widgets/common/FontWeightCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import '../../models/Comic/ComicModels.dart';
+import 'package:redux/redux.dart';
 
 class ContinueReadingCard extends StatelessWidget {
   final ComicCardContiuneReadingModel comicContiune;
@@ -60,7 +64,7 @@ class ContinueReadingCard extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(_createRoute());
+              Navigator.of(context).push(comicReviewPageRoute());
             },
             icon: Icon(Icons.play_arrow_sharp),
             iconSize: FONT_SIZE_16,
@@ -70,21 +74,4 @@ class ContinueReadingCard extends StatelessWidget {
       ),
     );
   }
-}
-
-Route _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => ComicReview(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1.0, 0.0);
-      var end = Offset.zero;
-      var tween = Tween(begin: begin, end: end);
-      var offsetAnimation = animation.drive(tween);
-
-      return SlideTransition(
-        position: offsetAnimation,
-        child: child,
-      );
-    },
-  );
 }

@@ -1,15 +1,6 @@
-import 'package:comic_mobile_app/models/User/UserModels.dart';
+import 'package:comic_mobile_app/models/User/UserModelB.dart';
 import 'package:comic_mobile_app/redux/actions/User/UserAction.dart';
-import 'package:flutter/cupertino.dart';
-
-@immutable
-class UserReducerState {
-  final bool? isLoading;
-  final bool? isError;
-  final UserModelB? user;
-
-  UserReducerState({this.isLoading, this.isError, this.user});
-}
+import 'package:comic_mobile_app/redux/reducers/User/State/UserReducerState.dart';
 
 UserReducerState UserReducer(UserReducerState previousState, dynamic action) {
   switch (action.type) {

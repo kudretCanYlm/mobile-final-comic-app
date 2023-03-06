@@ -1,15 +1,7 @@
 import 'package:comic_mobile_app/models/Comic/FavoriteModel.dart';
 import 'package:comic_mobile_app/redux/actions/Comic/FavoriteAction.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/FavoritesReducerState.dart';
 import 'package:flutter/cupertino.dart';
-
-@immutable
-class FavoritesReducerState {
-  final bool? isLoading;
-  final bool? isError;
-  final List<FavoriteModel>? favorites;
-
-  FavoritesReducerState({this.isLoading, this.isError, this.favorites});
-}
 
 FavoritesReducerState FavoritesReducer(
     FavoritesReducerState previousState, dynamic action) {
@@ -32,6 +24,25 @@ FavoritesReducerState FavoritesReducer(
         isError: false,
         favorites: action.favorites,
       );
+    case FavoriteActions.FAVORITE_SENDING:
+      return FavoritesReducerState(
+        isSending: action.isSending,
+        isSendError: false,
+        isSended: false,
+      );
+    case FavoriteActions.FAVORITE_SENDING_ERROR:
+      return FavoritesReducerState(
+        isSending: false,
+        isSendError: true,
+        isSended: false,
+      );
+    case FavoriteActions.FAVORITE_SENDED:
+      return FavoritesReducerState(
+        isSending: false,
+        isSendError: false,
+        isSended: true,
+      );
+
     default:
       return previousState;
   }

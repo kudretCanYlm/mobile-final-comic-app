@@ -1,16 +1,11 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontWeightCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
 import 'package:comic_mobile_app/widgets/texts/titles/TitleTypeA.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class PdfReadPage extends StatefulWidget {
@@ -29,32 +24,10 @@ class _PDFScreenState extends State<PdfReadPage> with WidgetsBindingObserver {
   int? currentPage = 0;
   bool isReady = false;
   String errorMessage = '';
-  String pathPDF = "";
 
   @override
   void initState() {
     super.initState();
-    fromAsset('lib/assets/batman.pdf', 'batman.pdf').then((f) {
-      setState(() {
-        pathPDF = f.path;
-      });
-    });
-  }
-
-  Future<File> fromAsset(String asset, String filename) async {
-    Completer<File> completer = Completer();
-    try {
-      var dir = await getApplicationDocumentsDirectory();
-      File file = File("${dir.path}/$filename");
-      var data = await rootBundle.load(asset);
-      var bytes = data.buffer.asUint8List();
-      await file.writeAsBytes(bytes, flush: true);
-      completer.complete(file);
-    } catch (e) {
-      throw Exception('Error parsing asset file!');
-    }
-
-    return completer.future;
   }
 
   @override
@@ -135,15 +108,6 @@ class _PDFScreenState extends State<PdfReadPage> with WidgetsBindingObserver {
               _controller.complete(pdfViewController);
             },
           ),
-          errorMessage.isEmpty
-              ? !isReady
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Container()
-              : Center(
-                  child: Text(errorMessage),
-                )
         ],
       ),
     );
