@@ -46,6 +46,8 @@ dependencies:
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
   firebase_database: ^10.0.9
+  firebase_storage: ^11.0.14
+  dio: ^5.0.1
   flutter_redux: ^0.10.0
   redux_thunk: ^0.4.0
   redux_logging: ^0.5.0
@@ -55,7 +57,9 @@ dependencies:
   shimmer: ^2.0.0
   json_annotation: ^4.6.0
   font_awesome_flutter: ^10.3.0
-
+  image: ^4.0.15
+  path_provider: ^2.0.12
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -85,8 +89,7 @@ flutter:
     - lib/assets/bg-images/Mountain_Range_Background.jpg
     - lib/assets/bg-images/mountain-svgrepo-com.svg
     - lib/assets/bg-images/Shape_Background.jpg
-    - lib/assets/batman.pdf
-
+    - lib/assets/tjz62Wka.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
