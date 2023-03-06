@@ -35,16 +35,28 @@ dynamic DeleteComicData() {
   };
 }
 
+dynamic DeleteComicById(String comicId) {
+  return (Store<AppReducerState> store) async {
+    //control
+
+    var comicData = store.state.comicDataReducerState!.comicData;
+
+    if (comicData.any((data) => data.ComicId == comicId)) {
+      comicData.removeWhere((data) => data.ComicId == comicId);
+      store.dispatch(SetComicDataList(comicData));
+    }
+  };
+}
+
 dynamic SetComicDownland(String comicId) {
   return (Store<AppReducerState> store) async {
     //control comic
-    String filename = comicId + ".pdf";
 
     if (!store.state.comicDataReducerState!.comicData
-        .any((element) => element.ComicId == filename)) {
+        .any((element) => element.ComicId == comicId)) {
       FirebaseStorage storage = FirebaseStorage.instance;
 
-      var dowUrl = await storage.ref(filename).getDownloadURL();
+      var dowUrl = await storage.ref("$comicId.pdf").getDownloadURL();
 
       var response =
           await http.Client().send(http.Request("GET", Uri.parse(dowUrl)));

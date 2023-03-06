@@ -45,23 +45,28 @@ class _ComicReviewPageState extends State<ComicReviewPage> {
     comicReviewPageStateModel.setComicId(widget.comicId);
 
     super.initState();
+
+    var comicDataList = widget.store.state.comicDataReducerState!.comicData;
+
     //control comic is there or not
-    if (widget.store.state.comicDataReducerState!.comicData
-        .any((element) => element.ComicId == widget.comicId)) {
-      if (widget.store.state.comicDataReducerState!.comicData
-              .firstWhere((element) => element.ComicId == widget.comicId)
-              .isSaved ==
-          true) {
+    if (comicDataList.any((element) => element.ComicId == widget.comicId)) {
+      var myComic = comicDataList
+          .firstWhere((element) => element.ComicId == widget.comicId);
+
+      if (myComic.isSaved == true) {
         comicReviewPageStateModel.processReadyToRead();
-      } else if (widget.store.state.comicDataReducerState!.comicData
-              .firstWhere((element) => element.ComicId == widget.comicId)
-              .isSaving ==
-          true) {
+      }
+
+      if (myComic.isSaving == true) {
         comicReviewPageStateModel.processSaving();
-      } else if (widget.store.state.comicDataReducerState!.comicData
-              .firstWhere((element) => element.ComicId == widget.comicId)
-              .isComicDowlanded() ==
-          false) {
+      }
+
+      if (myComic.isComicDowlanded() == false && myComic.getPercent() == "") {
+        widget.store.dispatch(DeleteComicById(widget.comicId));
+        comicReviewPageStateModel.processReadyToDowland();
+      }
+
+      if (myComic.isComicDowlanded() == false && myComic.getPercent() != "") {
         comicReviewPageStateModel.processDowlandingStart();
         listenState();
       }
@@ -97,6 +102,8 @@ class _ComicReviewPageState extends State<ComicReviewPage> {
       );
     } else {
       //start dowland data
+      var ksd = widget.store.state.comicDataReducerState;
+
       widget.store.dispatch(SetComicDownland(widget.comicId));
       setState(() {
         comicReviewPageStateModel.processDowlandingStart();

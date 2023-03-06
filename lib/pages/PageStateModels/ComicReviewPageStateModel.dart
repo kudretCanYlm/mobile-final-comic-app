@@ -25,6 +25,7 @@ class ComicReviewPageStateModel {
 
   processReadyToDowland() {
     state = ProcessState.ReadyToDownland;
+    buttonbackgroundColor = COLOR_B_HEAVY;
     buttonText = "Downland Comic Now";
   }
 
