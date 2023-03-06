@@ -1,5 +1,5 @@
 import 'package:comic_mobile_app/models/Comic/ComicModels.dart';
-import 'package:comic_mobile_app/pages/ComicReview.dart';
+import 'package:comic_mobile_app/pages/ComicReviewPage.dart';
 import 'package:comic_mobile_app/widgets/card/ContinueReadingCard.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 Future NetworkErrorModal(BuildContext context) {
+  Navigator.of(context).popUntil((route) => route.settings.name == '/');
   return showCupertinoModalBottomSheet(
     expand: true,
     enableDrag: false,

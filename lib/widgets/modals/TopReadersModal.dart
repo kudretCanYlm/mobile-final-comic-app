@@ -1,4 +1,4 @@
-import 'package:comic_mobile_app/models/User/UserModels.dart';
+import 'package:comic_mobile_app/models/User/UserModelA.dart';
 import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
