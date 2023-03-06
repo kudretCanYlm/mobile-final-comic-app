@@ -1,6 +1,6 @@
-import 'package:comic_mobile_app/pages/ComicReview.dart';
+import 'package:comic_mobile_app/pages/ComicReviewPage.dart';
 import 'package:comic_mobile_app/pages/ForgotPassword.dart';
-import 'package:comic_mobile_app/pages/LetUsKnow.dart';
+import 'package:comic_mobile_app/pages/LetUsKnowPage.dart';
 import 'package:comic_mobile_app/pages/LoginPage.dart';
 import 'package:comic_mobile_app/pages/MainPage/MainPage.dart';
 import 'package:comic_mobile_app/pages/MainPage/SubPage/SubMainPage.dart';
@@ -10,8 +10,8 @@ import 'package:comic_mobile_app/pages/MyProfilePage.dart';
 import 'package:comic_mobile_app/pages/PdfReadPage.dart';
 import 'package:comic_mobile_app/pages/ProfileDetailsPage.dart';
 import 'package:comic_mobile_app/pages/SignUpPage.dart';
+import 'package:comic_mobile_app/pages/SplashPage.dart';
 import 'package:comic_mobile_app/redux/Store.dart';
-import 'package:comic_mobile_app/redux/actions/Comic/FavoriteAction.dart';
 import 'package:comic_mobile_app/redux/reducers/AppReducerState.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,8 +21,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 Future<void> main() async {
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -30,43 +28,48 @@ Future<void> main() async {
   ));
 
   await Firebase.initializeApp();
+  Store<AppReducerState> store = await createStore();
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(const MyApp());
+    runApp(MyApp(store));
   });
 
   FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Store<AppReducerState> store;
+  const MyApp(this.store, {super.key});
 
   //Future<FirebaseApp> _fbApp = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
-        store: createStore(),
+        store: store,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.blueGrey,
           ),
-          home: StoreBuilder(
+          home: StoreBuilder<AppReducerState>(
             builder: (BuildContext context, Store<AppReducerState> store) =>
-                LoginPage(store),
-            onInit: (store) => {
-              //store.dispatch();
-            },
+                SplashPage(store),
+            onInit: (store) {},
           ),
           routes: {
+            "/splash": (context) => StoreBuilder<AppReducerState>(
+                  builder:
+                      (BuildContext context, Store<AppReducerState> store) =>
+                          SplashPage(store),
+                  onInit: (store) {},
+                ),
             "/login": (context) => StoreBuilder<AppReducerState>(
                   builder:
                       (BuildContext context, Store<AppReducerState> store) =>
                           LoginPage(store),
-                  onInit: (store) => {
-                    //store.dispatch();
-                  },
+                  onInit: (store) {},
                 ),
             "/signUp": (context) => StoreBuilder<AppReducerState>(
                   builder:
@@ -80,7 +83,7 @@ class MyApp extends StatelessWidget {
             "/letUsKnow": (context) => StoreBuilder<AppReducerState>(
                   builder:
                       (BuildContext context, Store<AppReducerState> store) =>
-                          LetUsKnow(store),
+                          LetUsKnowPage(store),
                   onInit: (store) => {
                     //  store.dispatch(GetFavoriteList()),
                   },
@@ -117,9 +120,23 @@ class MyApp extends StatelessWidget {
                     //store.dispatch();
                   },
                 ),
-            "/MyProfilePage": (context) => MyProfilePage(),
+            "/MyProfilePage": (context) => StoreBuilder<AppReducerState>(
+                  builder:
+                      (BuildContext context, Store<AppReducerState> store) =>
+                          MyProfilePage(store),
+                  onInit: (store) => {
+                    //store.dispatch();
+                  },
+                ),
             "/MyComicsPage": (context) => MyComicsPage(),
-            "/Review": (context) => ComicReview(),
+            "/Review": (context) => StoreBuilder<AppReducerState>(
+                  builder:
+                      (BuildContext context, Store<AppReducerState> store) =>
+                          ComicReviewPage(store),
+                  onInit: (store) => {
+                    //store.dispatch();
+                  },
+                ),
             "/PdfReadPage": (context) => PdfReadPage(),
           },
         ));
