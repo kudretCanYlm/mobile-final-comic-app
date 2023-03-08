@@ -18,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import "package:firebase_core/firebase_core.dart";
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:home_indicator/home_indicator.dart';
 import 'package:redux/redux.dart';
 
 Future<void> main() async {
@@ -26,7 +27,7 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
-
+  await HomeIndicator.hide();
   await Firebase.initializeApp();
   Store<AppReducerState> store = await createStore();
 

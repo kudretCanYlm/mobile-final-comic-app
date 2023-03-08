@@ -7,7 +7,7 @@ import 'package:comic_mobile_app/widgets/common/BorderRadiusCommon.dart';
 import 'package:comic_mobile_app/widgets/common/ColorsCommon.dart';
 import 'package:comic_mobile_app/widgets/common/FontSizeCommon.dart';
 import 'package:comic_mobile_app/widgets/common/MarginPaddingCommon.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ModalBottomSheetRoute;
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import '../../pages/MyComicsPage.dart';

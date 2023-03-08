@@ -222,6 +222,7 @@ class _SubMainPageState extends State<SubMainPage>
       ),
       body: CustomScrollView(
         controller: controller,
+        physics: ClampingScrollPhysics(),
         slivers: [
           SliverAppBar(
             elevation: 1,

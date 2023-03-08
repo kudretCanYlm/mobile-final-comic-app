@@ -73,7 +73,7 @@ dynamic PostProfileDetails(
         'Phone': profileDetailsModel.Phone, // Stokes and Sons
         'RealName': profileDetailsModel.RealName, // 42
         'base64Image':
-            ResizeImageFromBase64(profileDetailsModel.base64Image, 700, 700)
+            ResizeImageFromBase64(profileDetailsModel.base64Image, 650,650)
       }).then((value) {
         store.dispatch(ProfileDetailsSended(true));
         store.dispatch(Login(store.state.registerReducerState!.userId));

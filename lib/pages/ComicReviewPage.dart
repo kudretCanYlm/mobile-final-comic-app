@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:comic_mobile_app/models/Comic/ComicDataModel.dart';
 import 'package:comic_mobile_app/pages/PageStateModels/ComicReviewPageStateModel.dart';
 import 'package:comic_mobile_app/pages/PdfReadPage.dart';
@@ -483,8 +484,8 @@ class _ComicReviewPageState extends State<ComicReviewPage> {
               height: 60,
               bottom: 0,
               child: Container(
-                alignment: Alignment.bottomCenter,
-                padding: EdgeInsets.all(MAR_PAD_1),
+                alignment: Alignment.center,
+                padding:Platform.isIOS ? EdgeInsets.symmetric(vertical: MAR_PAD_0,horizontal: MAR_PAD_4): EdgeInsets.all(MAR_PAD_1),
                 child: TextButtonTypeA(comicReviewPageStateModel.buttonText,
                     margin: MAR_PAD_0,
                     backgroundColor:
