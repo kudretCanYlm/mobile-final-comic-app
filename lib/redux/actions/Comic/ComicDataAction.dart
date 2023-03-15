@@ -92,7 +92,6 @@ dynamic SetComicDownland(String comicId) {
               .firstWhere((element) => element.ComicId == comicId)
               .comicSaved();
           store.dispatch(SetComicDataList(newList));
-          print("dosya kaydedildi");
         });
       });
     }
