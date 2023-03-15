@@ -54,11 +54,11 @@ class _ComicReviewPageState extends State<ComicReviewPage> {
       var myComic = comicDataList
           .firstWhere((element) => element.ComicId == widget.comicId);
 
-      if (myComic.isSaved == true) {
+      if (myComic.IsSaved == true) {
         comicReviewPageStateModel.processReadyToRead();
       }
 
-      if (myComic.isSaving == true) {
+      if (myComic.IsSaving == true) {
         comicReviewPageStateModel.processSaving();
       }
 
@@ -121,9 +121,9 @@ class _ComicReviewPageState extends State<ComicReviewPage> {
               .firstWhere((element) => element.ComicId == widget.comicId);
           comicReviewPageStateModel.processDowlanding(model.getPercent());
 
-          if (model.isSaving == true) {
+          if (model.IsSaving == true) {
             comicReviewPageStateModel.processSaving();
-          } else if (model.isSaved == true) {
+          } else if (model.IsSaved == true) {
             comicReviewPageStateModel.processReadyToRead();
           }
         });
@@ -485,7 +485,10 @@ class _ComicReviewPageState extends State<ComicReviewPage> {
               bottom: 0,
               child: Container(
                 alignment: Alignment.center,
-                padding:Platform.isIOS ? EdgeInsets.symmetric(vertical: MAR_PAD_0,horizontal: MAR_PAD_4): EdgeInsets.all(MAR_PAD_1),
+                padding: Platform.isIOS
+                    ? EdgeInsets.symmetric(
+                        vertical: MAR_PAD_0, horizontal: MAR_PAD_4)
+                    : EdgeInsets.all(MAR_PAD_1),
                 child: TextButtonTypeA(comicReviewPageStateModel.buttonText,
                     margin: MAR_PAD_0,
                     backgroundColor:
