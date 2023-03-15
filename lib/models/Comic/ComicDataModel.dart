@@ -9,9 +9,9 @@ class ComicDataModel {
   final int TotalData;
   String _processPercent = "";
   int _received = 0;
-  bool _isDownload = false;
-  bool? isSaving;
-  bool? isSaved;
+  bool IsDownload = false;
+  bool? IsSaving;
+  bool? IsSaved;
 
   ComicDataModel(this.ComicId, this.TotalData);
 
@@ -19,25 +19,25 @@ class ComicDataModel {
     _processPercent =
         ((100 * received) / TotalData).toString().split(".").first;
     if (_processPercent == "100") {
-      _isDownload = true;
+      IsDownload = true;
     }
     print(_processPercent);
     return _processPercent;
   }
 
   comicSaving() {
-    this.isSaving = true;
-    this.isSaved = false;
+    this.IsSaving = true;
+    this.IsSaved = false;
   }
 
   comicSaved() {
-    this.isSaving = false;
-    this.isSaved = true;
+    this.IsSaving = false;
+    this.IsSaved = true;
   }
 
   String getPercent() => _processPercent;
 
-  bool isComicDowlanded() => _isDownload;
+  bool isComicDowlanded() => IsDownload;
 
   factory ComicDataModel.fromJson(Map<String, dynamic> json) =>
       _$ComicDataModelFromJson(json);
