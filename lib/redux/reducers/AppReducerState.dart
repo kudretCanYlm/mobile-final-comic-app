@@ -20,11 +20,15 @@ import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicStatisticsReduc
 import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicsReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/Comic/State/FavoritesReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/Comic/State/LikedComicsReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/TopComicsReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/TopComicsReducer.dart';
 import 'package:comic_mobile_app/redux/reducers/Page/MainPageIndexReducer.dart';
 import 'package:comic_mobile_app/redux/reducers/Page/State/MainPageIndexReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/Search/SearchReducer.dart';
 import 'package:comic_mobile_app/redux/reducers/Search/State/SearchReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/User/State/TopReadersReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/User/State/UserReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/User/TopReadersReducer.dart';
 import 'package:comic_mobile_app/redux/reducers/User/UserReducer.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -33,6 +37,7 @@ class AppReducerState {
   final AuthReducerState? authReducerState;
   final ProfileDetailsReducerState? profileDetailsReducerState;
   final RegisterReducerState? registerReducerState;
+  final TopReadersReducerState? topReadersReducerState;
   final UserReducerState? userReducerState;
   final ComicCharacterReducerState? comicCharacterReducerState;
   final ComicDataReducerState? comicDataReducerState;
@@ -40,6 +45,7 @@ class AppReducerState {
   final ComicStatisticsReducerState? comicStatisticsReducerState;
   final ComicsReducerState? comicsReducerState;
   final LikedComicsReducerState? likedComicsReducerState;
+  final TopComicsReducerState? topComicsReducerState;
   final FavoritesReducerState? favoritesReducerState;
   final MainPageIndexReducerState? mainPageIndexReducerState;
   final SearchReducerState? searchReducerState;
@@ -48,6 +54,7 @@ class AppReducerState {
       {this.authReducerState,
       this.profileDetailsReducerState,
       this.registerReducerState,
+      this.topReadersReducerState,
       this.userReducerState,
       this.comicCharacterReducerState,
       this.comicDataReducerState,
@@ -55,6 +62,7 @@ class AppReducerState {
       this.comicStatisticsReducerState,
       this.comicsReducerState,
       this.likedComicsReducerState,
+      this.topComicsReducerState,
       this.favoritesReducerState,
       this.mainPageIndexReducerState,
       this.searchReducerState});
@@ -78,6 +86,8 @@ AppReducerState AppReducer(AppReducerState state, action) {
     profileDetailsReducerState:
         ProfileDetailsReducer(state.profileDetailsReducerState!, action),
     registerReducerState: RegisterReducer(state.registerReducerState!, action),
+    topReadersReducerState:
+        TopReadersReducer(state.topReadersReducerState!, action),
     userReducerState: UserReducer(state.userReducerState!, action),
     comicCharacterReducerState:
         ComicCharacterReducer(state.comicCharacterReducerState!, action),
@@ -90,6 +100,8 @@ AppReducerState AppReducer(AppReducerState state, action) {
     comicsReducerState: ComicsReducer(state.comicsReducerState!, action),
     likedComicsReducerState:
         LikedComicsReducer(state.likedComicsReducerState!, action),
+    topComicsReducerState:
+        TopComicsReducer(state.topComicsReducerState!, action),
     favoritesReducerState:
         FavoritesReducer(state.favoritesReducerState!, action),
     mainPageIndexReducerState:

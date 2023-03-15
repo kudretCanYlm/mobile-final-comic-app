@@ -10,12 +10,15 @@ import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicStatisticsReduc
 import 'package:comic_mobile_app/redux/reducers/Comic/State/ComicsReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/Comic/State/FavoritesReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/Comic/State/LikedComicsReducerState.dart';
+import 'package:comic_mobile_app/redux/reducers/Comic/State/TopComicsReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/Page/State/MainPageIndexReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/Search/State/SearchReducerState.dart';
 import 'package:comic_mobile_app/redux/reducers/User/State/UserReducerState.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux_logging/redux_logging.dart';
+
+import 'reducers/User/State/TopReadersReducerState.dart';
 
 Future<Store<AppReducerState>> createStore() async {
   AppReducerState? initialState;
@@ -32,6 +35,7 @@ Future<Store<AppReducerState>> createStore() async {
         authReducerState: initialState?.authReducerState ?? AuthReducerState(),
         profileDetailsReducerState: ProfileDetailsReducerState(),
         registerReducerState: RegisterReducerState(),
+        topReadersReducerState: TopReadersReducerState(),
         userReducerState: UserReducerState(),
         comicCharacterReducerState: ComicCharacterReducerState(),
         comicDataReducerState:
@@ -40,6 +44,7 @@ Future<Store<AppReducerState>> createStore() async {
         comicStatisticsReducerState: ComicStatisticsReducerState(),
         comicsReducerState: ComicsReducerState(),
         likedComicsReducerState: LikedComicsReducerState(),
+        topComicsReducerState: TopComicsReducerState(),
         favoritesReducerState: FavoritesReducerState(),
         mainPageIndexReducerState: MainPageIndexReducerState(index: 1),
         searchReducerState: SearchReducerState()),
