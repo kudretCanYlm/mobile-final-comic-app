@@ -1,20 +1,18 @@
-# comic_mobile_app
+# Comic App
 
-# huseyin
+## Used
+### Flutter
+### Redux
+### Firebase
 
-A new Flutter project.
-
-# https://www.figma.com/community/file/1135958846088009897
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screens
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134518.png)
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134561.png)
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134595.png)
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134812.png)
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134816.png)
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134819.png)
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134823.png)
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134836.png)
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134845.png)
+![](https://github.com/kudretCanYlm/react-shopping/blob/main/images/Screenshot_1676134856.png)
